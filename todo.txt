@@ -1,0 +1,4 @@
+18.05.2022
+- [] Decide on the tokens
+- [] Add a simple scanner
+- [] Add escape characters
