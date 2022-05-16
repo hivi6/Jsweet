@@ -5,3 +5,6 @@ Ok this time serious, learn to make a simple programming language
 added a simple main file
 # What a feeling - One Direction
 # Heat Above - Greta Van Fleet
+Added the application interface, like repl and the file execution function
+# Sprint Thief - Yorushika
+Added Simple Error Handling for the Scanner and Parser
