@@ -13,3 +13,4 @@ Added Simple Error Handling for the Scanner and Parser
 Added Token and TokenType
 # Umi no Mieru Machi Piano - Kiki's Delivery Service
 Added a simple Scanner
+# Almost(Sweet Music) - Hozier

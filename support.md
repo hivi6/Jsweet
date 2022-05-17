@@ -9,7 +9,7 @@
 1. [] Functioning Scanner
 
 ## Scanner
-[] Workable Lexer?
+[x] Workable Lexer?
 
 1. [x] Line number and Column number support
 1. [x] Support single line
@@ -26,4 +26,4 @@
 1. [] hex integer support
 1. [] integer support(make sure of the sign)
 1. [] floating-point literal support
-1. [] Keywords support
+1. [x] Keywords support

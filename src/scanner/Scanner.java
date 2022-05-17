@@ -1,11 +1,14 @@
 package scanner;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import runtime.SweetRuntime;
 import token.Token;
 import token.TokenType;
+import types.SwtString;
 
 import static token.TokenType.*;
 
@@ -15,6 +18,27 @@ public class Scanner {
     private int startIndex = -1, currIndex = 0; // indices
     private int startLine = -1, currLine = 1; // line-number of a token
     private int startColumn = -1, currColumn = 1; // column number of a token
+    private static final Map<String, TokenType> keywords;
+
+    static {
+        keywords = new HashMap<>();
+        keywords.put("true", TRUE);
+        keywords.put("false", FALSE);
+        keywords.put("nil", NIL);
+        keywords.put("and", AND);
+        keywords.put("or", OR);
+        keywords.put("print", PRINT);
+        keywords.put("var", VAR);
+        keywords.put("if", IF);
+        keywords.put("else", ELSE);
+        keywords.put("for", FOR);
+        keywords.put("while", WHILE);
+        keywords.put("fun", FUN);
+        keywords.put("return", RETURN);
+        keywords.put("class", CLASS);
+        keywords.put("super", SUPER);
+        keywords.put("this", THIS);
+    }
 
     public Scanner(String source) {
         this.source = source;
@@ -108,8 +132,17 @@ public class Scanner {
                     addToken(SLASH);
                 break;
             }
+            case '"':
+                stringLiteral();
+                break;
             default:
-                SweetRuntime.error(startLine, startColumn, "Undefined Token.");
+                if (Character.isDigit(ch)) {
+                    integerLiteral();
+                } else if (Character.isLetter(ch) || ch == '_') {
+                    identifier();
+                } else {
+                    SweetRuntime.error(startLine, startColumn, "Undefined Token.");
+                }
         }
     }
 
@@ -128,11 +161,16 @@ public class Scanner {
     }
 
     private void addToken(TokenType type) {
-        addToken(type, source.substring(startIndex, currIndex), null, startLine, startColumn);
+        addToken(type, null);
     }
 
-    private void addToken(TokenType type, String lexeme, Object literal, int line, int column) {
-        tokens.add(new Token(type, lexeme, literal, line, column));
+    private void addToken(TokenType type, Object literal) {
+        String lexeme = source.substring(startIndex, currIndex);
+        addToken(type, lexeme, literal, startLine, startColumn);
+    }
+
+    private void addToken(TokenType type, String lexeme, Object literal, int startLine, int startColumn) {
+        tokens.add(new Token(type, lexeme, literal, startLine, startColumn));
     }
 
     private boolean match(char ch) {
@@ -152,5 +190,47 @@ public class Scanner {
         if (k + currIndex >= source.length())
             return 0;
         return source.charAt(k + currIndex);
+    }
+
+    private void integerLiteral() {
+        // FIXME: Support to right integer literal support
+        // For now just traverse through the string and add any character that is
+        // a digit
+        while (!isEnd() && Character.isDigit(peek()))
+            advance();
+        String lexeme = source.substring(startIndex, currIndex);
+        int literal = Integer.parseInt(lexeme);
+        addToken(INT, literal);
+    }
+
+    private void stringLiteral() {
+        // FIXME: Support Correct format, like raw strings, normal string literals, or
+        // FIXME: string interpolation
+        // For now just traverse through the string and add characters untill the a
+        // double-quote(") is found
+        while (!isEnd() && peek() != '"')
+            advance();
+
+        // if no double-quote is found that means it is the end of the string, which
+        // means its and error because there was no string termination using "
+        if (!match('"')) {
+            SweetRuntime.error(currLine, currColumn, "\" is missing, the string is unterminated.");
+            return;
+        }
+
+        SwtString literal = new SwtString(source.substring(startIndex + 1, currIndex - 1));
+        addToken(STRING, literal);
+    }
+
+    private void identifier() {
+        advance(); // first character will be a letter or an underscore(_)
+        while (!isEnd() && (Character.isLetter(peek()) || Character.isDigit(peek()) || peek() == '_'))
+            advance();
+
+        String lexeme = source.substring(startIndex, currIndex);
+        TokenType type = keywords.get(lexeme);
+        if (type == null)
+            type = IDENTIFIER;
+        addToken(type);
     }
 }
