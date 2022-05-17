@@ -1,4 +1,4 @@
-18.05.2022
+17.05.2022
 - [x] Repl and File execution
 - [x] Decide on the tokens
 - [x] Add a simple scanner
