@@ -2,10 +2,10 @@
 
 ## Misc
 
-1. [] Execute File
-1. [] Execute repl
-1. [] Create Token class
-1. [] Define Token type(Characters, Keywords, Literals) 
+1. [x] Execute File
+1. [x] Execute repl
+1. [x] Create Token class
+1. [x] Define Token type(Characters, Keywords, Literals) 
 1. [] Functioning Scanner
 
 ## Scanner

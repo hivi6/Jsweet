@@ -1,5 +1,5 @@
 18.05.2022
-- [] Repl and File execution
-- [] Decide on the tokens
-- [] Add a simple scanner
+- [x] Repl and File execution
+- [x] Decide on the tokens
+- [x] Add a simple scanner
 - [] Add escape characters

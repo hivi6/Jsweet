@@ -3,9 +3,8 @@ package runtime;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+
+import util.Util;
 
 public class SweetRuntime {
     // =========
@@ -23,12 +22,13 @@ public class SweetRuntime {
     }
 
     private static void report(int line, int column, String where, String msg) {
-        // Format: [Line 13:14] Error: 
+        // Format: [11:14] Error: Missing semi-colon after expression.
         System.err.println("[" + line + ": " + column + "] Error" + where + ": " + msg);
         hadError = true;
     }
 
     private static void report(int line, String where, String msg) {
+        // Format: [Line 11] Invalid statement.
         System.err.println("[Line " + line + "] Error" + where + ": " + msg);
         hadError = true;
     }
@@ -63,8 +63,7 @@ public class SweetRuntime {
 
     public static void runFile(String filePath) throws IOException {
         // read source
-        byte[] bytes = Files.readAllBytes(Paths.get(filePath));
-        String source = new String(bytes, Charset.defaultCharset());
+        String source = Util.readFile(filePath);
         
         // run
         run(source);

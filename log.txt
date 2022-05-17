@@ -8,3 +8,8 @@ added a simple main file
 Added the application interface, like repl and the file execution function
 # Sprint Thief - Yorushika
 Added Simple Error Handling for the Scanner and Parser
+# Golden Time Lover - FMAB
+# Brandy You'r a fine Girl - Looking Glass
+Added Token and TokenType
+# Umi no Mieru Machi Piano - Kiki's Delivery Service
+Added a simple Scanner
