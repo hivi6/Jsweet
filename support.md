@@ -11,11 +11,12 @@
 ## Scanner
 [] Workable Lexer?
 
-1. [] Line number and Column number support
-1. [] Support single line and multiline comments
-1. [] Scan single characters
-1. [] Arithemetic operations
-1. [] Relational
+1. [x] Line number and Column number support
+1. [x] Support single line
+1. [] multiline comments
+1. [x] Scan single characters
+1. [x] Arithemetic operations
+1. [x] Relational
 1. [] Bitwise
 1. [] Character Literal support 
 1. [] Normal String Literal support
