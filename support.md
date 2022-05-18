@@ -36,7 +36,7 @@
     1. [x] Literal Support
     1. [x] Arithmetic Support
     1. [x] Relational Support
-    1. [] Comma Expression Support
-    1. [] Ternary Operator Support
+    1. [x] Comma Expression Support
+    1. [x] Conditional expression Support
 1. [] Statement Support
     1. [] Print Statement

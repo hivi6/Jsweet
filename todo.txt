@@ -1,5 +1,7 @@
 18.05.2022
 - [x] Handling multiple line comment
+- [x] Simple Parser
+- [x] Comma Expression and Conditional Operations
 
 17.05.2022
 - [x] Repl and File execution

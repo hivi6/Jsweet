@@ -96,6 +96,7 @@ public class GenerateAst {
         String srcPath = "D:/Development/project/jsweet/src";
         defineAst(srcPath, "Expr", Arrays.asList(
             "BinaryExpr     : Expr left, Token op, Expr right",
+            "TernaryExpr    : Expr cond, Expr trueExpr, Expr falseExpr",
             "UnaryExpr      : Token op, Expr right",
             "GroupExpr      : Expr expr",
             "LiteralExpr    : Object val"

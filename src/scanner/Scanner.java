@@ -101,6 +101,12 @@ public class Scanner {
             case ',':
                 addToken(COMMA);
                 break;
+            case '?':
+                addToken(QMARK);
+                break;
+            case ':':
+                addToken(COLON);
+                break;
             case '=':
                 addToken(match('=') ? EQUAL_EQUAL : EQUAL);
                 break;

@@ -5,6 +5,7 @@ public enum TokenType {
     LPAREN, RPAREN, // ( )
     LBRACE, RBRACE, // { }
     SEMICOLON, COMMA, DOT, // ; , .
+    QMARK, COLON, // ? :
 
     // Arithmetic
     PLUS, // +

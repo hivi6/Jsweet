@@ -26,4 +26,12 @@ public class AstPrinter implements ExprVisitor<String> {
     public String visit(LiteralExpr expr) {
         return expr.val.toString();
     }
+
+    @Override
+    public String visit(TernaryExpr expr) {
+        return "(conditional " +
+                expr.cond.accept(this) + " " +
+                expr.trueExpr.accept(this) + " " +
+                expr.falseExpr.accept(this) + ")";
+    }
 }

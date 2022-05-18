@@ -1,6 +1,8 @@
 
 /*
     expression  -> equality ;
+    comma       -> equality ("," equality)* ;
+    ternary     -> equality ("?" expression ":" ternary)? ;
     equality    -> comparison ( ( "!=" | "==" ) comparison )* ;
     comparison  -> term ( ( ">" | ">=" | "<" | "<=" ) term )* ;
     term        -> factor ( ( "-" | "+" ) factor )* ;
@@ -19,6 +21,7 @@ import ast.BinaryExpr;
 import ast.Expr;
 import ast.GroupExpr;
 import ast.LiteralExpr;
+import ast.TernaryExpr;
 import ast.UnaryExpr;
 import runtime.SweetRuntime;
 import token.Token;
@@ -42,8 +45,33 @@ public class Parser {
         }
     }
 
+    //**********
+    // Just Converting the grammar to functions
+    //**********
+
     private Expr expression() {
-        return equality();
+        return comma();
+    }
+
+    private Expr comma() {
+        Expr left = ternary();
+        while (match(COMMA)) {
+            Token op = previous();
+            Expr right = ternary();
+            left = new BinaryExpr(left, op, right);
+        }
+        return left;
+    }
+
+    private Expr ternary() {
+        Expr expr = equality();
+        if (match(QMARK)) {
+            Expr trueExpr = expression();
+            consume(COLON, "Expected ':' inside a conditional expression.");
+            Expr falseExpr = ternary();
+            expr = new TernaryExpr(expr, trueExpr, falseExpr);
+        }
+        return expr;
     }
 
     private Expr equality() {
