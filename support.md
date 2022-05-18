@@ -27,3 +27,16 @@
 1. [] integer support(make sure of the sign)
 1. [] floating-point literal support
 1. [x] Keywords support
+
+# Parser
+[x] Workable Parser?
+
+1. [] Expression Support
+    1. [x] Precedence Support
+    1. [x] Literal Support
+    1. [x] Arithmetic Support
+    1. [x] Relational Support
+    1. [] Comma Expression Support
+    1. [] Ternary Operator Support
+1. [] Statement Support
+    1. [] Print Statement

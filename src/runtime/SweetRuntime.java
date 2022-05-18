@@ -5,9 +5,13 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
 
+import ast.AstPrinter;
+import ast.Expr;
+import parser.Parser;
 import scanner.Scanner;
 import token.Token;
 import util.Util;
+import token.TokenType;
 
 public class SweetRuntime {
     // =========
@@ -22,6 +26,14 @@ public class SweetRuntime {
 
     public static void error(int line, String msg) {
         report(line, "", msg);
+    }
+
+    public static void error(Token token, String message) {
+        if (token.type == TokenType.EOF) {
+            report(token.line, " at end", message);
+        } else {
+            report(token.line, " at '" + token.lexeme + "'", message);
+        }
     }
 
     private static void report(int line, int column, String where, String msg) {
@@ -55,7 +67,7 @@ public class SweetRuntime {
             if (source == null) {
                 break;
             }
-            
+
             // run
             run(source);
 
@@ -67,7 +79,7 @@ public class SweetRuntime {
     public static void runFile(String filePath) throws IOException {
         // read source
         String source = Util.readFile(filePath);
-        
+
         // run
         run(source);
 
@@ -79,8 +91,13 @@ public class SweetRuntime {
     private static void run(String source) {
         Scanner scanner = new Scanner(source);
         List<Token> tokens = scanner.getTokens();
+        Parser parser = new Parser(tokens);
+        Expr expression = parser.parse();
 
-        for (Token token: tokens)
-            System.out.println(token);
+        // Stop if there was a syntax error.
+        if (hadError)
+            return;
+
+        System.out.println(new AstPrinter().print(expression));
     }
 }

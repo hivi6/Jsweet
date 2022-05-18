@@ -9,3 +9,4 @@ hoh + 123 - 2
 and or true false nil
 print var if else, for // this is a single line comment
 while fun, return, class super this ok
+hello_ok123 123abc _123
