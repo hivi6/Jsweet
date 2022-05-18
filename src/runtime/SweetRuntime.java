@@ -3,7 +3,10 @@ package runtime;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.List;
 
+import scanner.Scanner;
+import token.Token;
 import util.Util;
 
 public class SweetRuntime {
@@ -74,6 +77,10 @@ public class SweetRuntime {
     }
 
     private static void run(String source) {
-        System.out.println("Inside run()\n" + source);
+        Scanner scanner = new Scanner(source);
+        List<Token> tokens = scanner.getTokens();
+
+        for (Token token: tokens)
+            System.out.println(token);
     }
 }

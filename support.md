@@ -6,14 +6,14 @@
 1. [x] Execute repl
 1. [x] Create Token class
 1. [x] Define Token type(Characters, Keywords, Literals) 
-1. [] Functioning Scanner
+1. [x] Functioning Scanner
 
 ## Scanner
 [x] Workable Lexer?
 
 1. [x] Line number and Column number support
 1. [x] Support single line
-1. [] multiline comments
+1. [x] multiline comments
 1. [x] Scan single characters
 1. [x] Arithemetic operations
 1. [x] Relational

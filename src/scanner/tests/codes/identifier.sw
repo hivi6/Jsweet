@@ -5,3 +5,7 @@ hoh + 123 - 2
 1
 
 123
+"
+and or true false nil
+print var if else, for // this is a single line comment
+while fun, return, class super this ok

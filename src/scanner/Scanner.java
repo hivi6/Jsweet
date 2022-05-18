@@ -125,9 +125,22 @@ public class Scanner {
             case '/': {
                 if (match('/')) { // '/'
                     // this is a single line comment
-                    // ignore everything after this
+                    // ignore everything untill a new line
                     while (!isEnd() && peek() != '\n')
                         advance();
+                } else if (match('*')) { // '/*'
+                    // this is a multiple line comment
+                    // ignore everything until a '*/' is reached
+                    while (!isEnd() && !(peek() == '*' && peek(1) == '/'))
+                        advance();
+                    if (isEnd()) {
+                        SweetRuntime.error(currLine,
+                                currColumn,
+                                "*/ is missing, Multi-line comment unterminated.");
+                    } else {
+                        advance(); // *
+                        advance(); // /
+                    }
                 } else
                     addToken(SLASH);
                 break;
