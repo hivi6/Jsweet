@@ -7,6 +7,7 @@ import java.util.List;
 
 import ast.AstPrinter;
 import ast.Expr;
+import interpreter.Interpreter;
 import parser.Parser;
 import scanner.Scanner;
 import token.Token;
@@ -14,11 +15,14 @@ import util.Util;
 import token.TokenType;
 
 public class SweetRuntime {
+    private static final Interpreter interpreter = new Interpreter();
+
     // =========
     // Error Handling
     // =========
 
     private static boolean hadError = false;
+    private static boolean hadRuntimeError = false;
 
     public static void error(int line, int column, String msg) {
         report(line, column, "", msg);
@@ -34,6 +38,12 @@ public class SweetRuntime {
         } else {
             report(token.line, " at '" + token.lexeme + "'", message);
         }
+    }
+
+    public static void runtimeError(SwtRuntimeError error) {
+        System.err.println(error.getMessage() +
+                "\n[line " + error.token.line + "]");
+        hadRuntimeError = true;
     }
 
     private static void report(int line, int column, String where, String msg) {
@@ -86,6 +96,8 @@ public class SweetRuntime {
         // indicating error in exit mode
         if (hadError)
             System.exit(65);
+        if (hadRuntimeError)
+            System.exit(70);
     }
 
     private static void run(String source) {
@@ -98,6 +110,6 @@ public class SweetRuntime {
         if (hadError)
             return;
 
-        System.out.println(new AstPrinter().print(expression));
+        interpreter.interpret(expression);
     }
 }

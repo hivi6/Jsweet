@@ -1,7 +1,7 @@
 
 /*
     expression  -> equality ;
-    comma       -> equality ("," equality)* ;
+    comma       -> ternary ("," ternary)* ;
     ternary     -> equality ("?" expression ":" ternary)? ;
     equality    -> comparison ( ( "!=" | "==" ) comparison )* ;
     comparison  -> term ( ( ">" | ">=" | "<" | "<=" ) term )* ;

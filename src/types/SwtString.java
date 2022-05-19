@@ -19,6 +19,10 @@ public class SwtString {
         this.builder = new StringBuilder(s.builder.toString());
     }
 
+    public int length() {
+        return this.builder.length();
+    }
+
     public char at(int i) {
         if (0 <= i && i < this.builder.length())
             return this.builder.charAt(i);
@@ -48,5 +52,17 @@ public class SwtString {
     @Override
     public String toString() {
         return this.builder.toString();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof SwtString))
+            return false;
+        if (((SwtString) obj).length() != length())
+            return false;
+        for (int i = 0; i < length(); i++)
+            if (at(i) != ((SwtString) obj).at(i))
+                return false;
+        return true;
     }
 }

@@ -31,7 +31,7 @@
 # Parser
 [x] Workable Parser?
 
-1. [] Expression Support
+1. [x] Expression Support
     1. [x] Precedence Support
     1. [x] Literal Support
     1. [x] Arithmetic Support
@@ -40,3 +40,16 @@
     1. [x] Conditional expression Support
 1. [] Statement Support
     1. [] Print Statement
+
+# Interpreter
+[x] Workable Interpreter?
+
+1. [x] Evaluate Expression
+    1. [x] Arithmetic expression
+    1. [x] Relational expression
+    1. [] Logical expression
+    1. [x] Comma expression
+    1. [x] Conditional expression
+    1. [] Functional expression
+1. [] Evaluate Statement
+    1. [] Print expression
