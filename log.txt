@@ -1,5 +1,8 @@
 19.05.2022
 Add interpreter for expression evaluation
+# Aimer marathon
+Adding support of Statements and variable declarations
+Added addition of string and number
 
 18.05.2022
 Added Multiline comment support

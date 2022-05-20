@@ -25,9 +25,6 @@ public class ParserTest {
             Scanner scanner = new Scanner(source);
             List<Token> tokens = scanner.getTokens();
             Parser parser = new Parser(tokens);
-            Expr expr = parser.parse();
-            
-            System.out.println(new AstPrinter().print(expr));
         }
     }
 }

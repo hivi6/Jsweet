@@ -5,8 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
 
-import ast.AstPrinter;
-import ast.Expr;
+import ast.Stmt;
 import interpreter.Interpreter;
 import parser.Parser;
 import scanner.Scanner;
@@ -104,12 +103,12 @@ public class SweetRuntime {
         Scanner scanner = new Scanner(source);
         List<Token> tokens = scanner.getTokens();
         Parser parser = new Parser(tokens);
-        Expr expression = parser.parse();
+        List<Stmt> statements = parser.parse();
 
         // Stop if there was a syntax error.
         if (hadError)
             return;
 
-        interpreter.interpret(expression);
+        interpreter.interpret(statements);
     }
 }

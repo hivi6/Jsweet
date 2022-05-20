@@ -1,23 +1,31 @@
 package interpreter;
 
+import java.util.List;
+
 import ast.BinaryExpr;
 import ast.Expr;
+import ast.ExprStmt;
 import ast.GroupExpr;
 import ast.LiteralExpr;
+import ast.PrintStmt;
+import ast.Stmt;
 import ast.TernaryExpr;
 import ast.UnaryExpr;
 import runtime.SweetRuntime;
 import runtime.SwtRuntimeError;
+import token.Token;
 import types.SwtString;
 import visitor.ExprVisitor;
+import visitor.StmtVisitor;
 
-public class Interpreter implements ExprVisitor<Object> {
-    public void interpret(Expr expression) {
+public class Interpreter implements ExprVisitor<Object>, StmtVisitor<Void> {
+    public void interpret(List<Stmt> statements) {
         try {
-            Object value = evaluate(expression);
-            System.out.println(value);
-        } catch (SwtRuntimeError e) {
-            SweetRuntime.runtimeError(e);
+            for (Stmt statement : statements) {
+                execute(statement);
+            }
+        } catch (SwtRuntimeError error) {
+            SweetRuntime.runtimeError(error);
         }
     }
 
@@ -32,11 +40,12 @@ public class Interpreter implements ExprVisitor<Object> {
 
         switch (expr.op.type) {
             case SLASH:
-                if (!isInt(left, right))
-                    throw new SwtRuntimeError(expr.op, "Operands must be int.");
-                if ((int) right == 0)
-                    throw new SwtRuntimeError(expr.op, "Division by zero.");
-                return (int) left / (int) right;
+                if (isInt(left, right)) {
+                    if ((int) right == 0)
+                        throw new SwtRuntimeError(expr.op, "Division by zero.");
+                    return (int) left / (int) right;
+                }
+                throw unsupportedOperator(expr.op, 2);
             case STAR:
                 if (isInt(left, right))
                     return (int) left * (int) right;
@@ -58,7 +67,7 @@ public class Interpreter implements ExprVisitor<Object> {
                         res.append(temp);
                     return res;
                 }
-                throw new SwtRuntimeError(expr.op, "Not support for the given 2 operands.");
+                throw unsupportedOperator(expr.op, 2);
             case MINUS:
                 if (!isInt(left, right))
                     throw new SwtRuntimeError(expr.op, "Operands must be int.");
@@ -71,24 +80,28 @@ public class Interpreter implements ExprVisitor<Object> {
                     res.append((SwtString) right);
                     return res;
                 }
-                throw new SwtRuntimeError(expr.op, "Not support for the given 2 operands.");
+                if ((isInt(left) && isString(right)) || (isString(left) && isInt(right))) {
+                    // "123" + 45 = "12345"
+                    return new SwtString(left.toString() + right.toString());
+                }
+                throw unsupportedOperator(expr.op, 2);
             // TODO: To add relational operation for String
             case LESS:
                 if (isInt(left, right))
                     return (int) left < (int) right;
-                throw new SwtRuntimeError(expr.op, "Not support for the given 2 operands.");
+                throw unsupportedOperator(expr.op, 2);
             case LESS_EQUAL:
                 if (isInt(left, right))
                     return (int) left <= (int) right;
-                throw new SwtRuntimeError(expr.op, "Not support for the given 2 operands.");
+                throw unsupportedOperator(expr.op, 2);
             case GREATER:
                 if (isInt(left, right))
                     return (int) left > (int) right;
-                throw new SwtRuntimeError(expr.op, "Not support for the given 2 operands.");
+                throw unsupportedOperator(expr.op, 2);
             case GREATER_EQUAL:
                 if (isInt(left, right))
                     return (int) left >= (int) right;
-                throw new SwtRuntimeError(expr.op, "Not support for the given 2 operands.");
+                throw unsupportedOperator(expr.op, 2);
             case BANG_EQUAL:
                 return !isEqual(left, right);
             case EQUAL_EQUAL:
@@ -110,10 +123,8 @@ public class Interpreter implements ExprVisitor<Object> {
          * a == 0 then will led to division by zero error, even though the whole reason
          * for the expression was to not evaluate a division by zero.
          * So here we do lazy propagation, i.e. first check condition and then
-         * accordingly
-         * evaluate the expression, but this can led to leaving type mismatch(this can
-         * be resolved
-         * by a resolver, or a semantic analyzer).
+         * accordingly evaluate the expression, but this can led to leaving type
+         * mismatch(this can be resolved by a resolver, or a semantic analyzer).
          */
         Object cond = evaluate(expr.cond);
         if (isTrue(cond))
@@ -127,9 +138,9 @@ public class Interpreter implements ExprVisitor<Object> {
 
         switch (expr.op.type) {
             case MINUS: // only available with numeric types
-                if (!isInt(right))
-                    throw new SwtRuntimeError(expr.op, "Operand must be a integer.");
-                return -(int) right;
+                if (isInt(right))
+                    return -(int) right;
+                throw unsupportedOperator(expr.op, 1);
             case BANG:
                 return !isTrue(right);
             default:
@@ -146,6 +157,23 @@ public class Interpreter implements ExprVisitor<Object> {
     @Override
     public Object visit(LiteralExpr expr) {
         return expr.val;
+    }
+
+    @Override
+    public Void visit(ExprStmt stmt) {
+        evaluate(stmt.expr);
+        return null;
+    }
+
+    @Override
+    public Void visit(PrintStmt stmt) {
+        for (int i = 0; i < stmt.arguments.size(); i++) {
+            if (i != 0)
+                System.out.print(" ");
+            System.out.print(evaluate(stmt.arguments.get(i)));
+        }
+        System.out.println();
+        return null;
     }
 
     // **********
@@ -191,5 +219,13 @@ public class Interpreter implements ExprVisitor<Object> {
         if (left == null || right == null)
             return false;
         return left.equals(right);
+    }
+
+    private SwtRuntimeError unsupportedOperator(Token op, int operandCount) {
+        return new SwtRuntimeError(op, "Unsupported operator for the " + operandCount + " operands.");
+    }
+
+    private void execute(Stmt stmt) {
+        stmt.accept(this);
     }
 }

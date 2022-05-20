@@ -52,4 +52,6 @@
     1. [x] Conditional expression
     1. [] Functional expression
 1. [] Evaluate Statement
-    1. [] Print expression
+    1. [x] Expression Statement
+    1. [x] Print Statement
+    1. [] Variable Declaration

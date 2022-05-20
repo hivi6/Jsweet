@@ -95,11 +95,14 @@ public class GenerateAst {
     public static void main(String args[]) throws IOException {
         String srcPath = "D:/Development/project/jsweet/src";
         defineAst(srcPath, "Expr", Arrays.asList(
-            "BinaryExpr     : Expr left, Token op, Expr right",
-            "TernaryExpr    : Expr cond, Expr trueExpr, Expr falseExpr",
-            "UnaryExpr      : Token op, Expr right",
-            "GroupExpr      : Expr expr",
-            "LiteralExpr    : Object val"
-        ));
+                "BinaryExpr     : Expr left, Token op, Expr right",
+                "TernaryExpr    : Expr cond, Expr trueExpr, Expr falseExpr",
+                "UnaryExpr      : Token op, Expr right",
+                "GroupExpr      : Expr expr",
+                "LiteralExpr    : Object val"));
+
+        defineAst(srcPath, "Stmt", Arrays.asList(
+                "ExprStmt       : Expr expr",
+                "PrintStmt      : List<Expr> arguments"));
     }
 }

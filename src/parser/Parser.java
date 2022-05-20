@@ -1,26 +1,36 @@
 
 /*
-    expression  -> equality ;
-    comma       -> ternary ("," ternary)* ;
-    ternary     -> equality ("?" expression ":" ternary)? ;
-    equality    -> comparison ( ( "!=" | "==" ) comparison )* ;
-    comparison  -> term ( ( ">" | ">=" | "<" | "<=" ) term )* ;
-    term        -> factor ( ( "-" | "+" ) factor )* ;
-    factor      -> unary ( ( "/" | "*" ) unary )* ;
-    unary       -> ( "!" | "-" ) unary
-                 | primary ;
-    primary     -> NUMBER | STRING | "true" | "false" | "nil"
-                 | "(" expression ")" ;
+    program             -> statement* EOF ;
+    statement           -> expressionStatement
+                         | printStatement ;
+    expressionStatement -> expression ;
+    printStatement      -> "print" arguments* ";" ;
+    arguments           -> ternary ("," ternary)* ;
+    expression          -> comma ;
+    comma               -> ternary ("," ternary)* ;
+    ternary             -> equality ("?" expression ":" ternary)? ;
+    equality            -> comparison ( ( "!=" | "==" ) comparison )* ;
+    comparison          -> term ( ( ">" | ">=" | "<" | "<=" ) term )* ;
+    term                -> factor ( ( "-" | "+" ) factor )* ;
+    factor              -> unary ( ( "/" | "*" ) unary )* ;
+    unary               -> ( "!" | "-" ) unary
+                         | primary ;
+    primary             -> NUMBER | STRING | "true" | "false" | "nil"
+                         | "(" expression ")" ;
 */
 
 package parser;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import ast.BinaryExpr;
 import ast.Expr;
+import ast.ExprStmt;
 import ast.GroupExpr;
 import ast.LiteralExpr;
+import ast.PrintStmt;
+import ast.Stmt;
 import ast.TernaryExpr;
 import ast.UnaryExpr;
 import runtime.SweetRuntime;
@@ -37,17 +47,50 @@ public class Parser {
         this.tokens = tokens;
     }
 
-    public Expr parse() {
+    public List<Stmt> parse() {
+        List<Stmt> stmts = new ArrayList<>();
         try {
-            return expression();
-        } catch (ParseError error) {
-            return null;
+            while (!isEnd()) {
+                stmts.add(statement());
+            }
+        } catch (ParseError e) {
+
         }
+        return stmts;
     }
 
-    //**********
+    // **********
     // Just Converting the grammar to functions
-    //**********
+    // **********
+
+    private Stmt statement() {
+        if (match(PRINT))
+            return printStatement();
+        return expressionStatement();
+    }
+
+    private Stmt expressionStatement() {
+        Expr expr = expression();
+        consume(SEMICOLON, "Expected ';' after value.");
+        return new ExprStmt(expr);
+    }
+
+    private Stmt printStatement() {
+        if (match(SEMICOLON))
+            return new PrintStmt(new ArrayList<>());
+        List<Expr> args = arguments();
+        consume(SEMICOLON, "Expected ';' after value.");
+        return new PrintStmt(args);
+    }
+
+    private List<Expr> arguments() {
+        List<Expr> args = new ArrayList<>();
+        args.add(ternary());
+        while (match(COMMA)) {
+            args.add(ternary());
+        }
+        return args;
+    }
 
     private Expr expression() {
         return comma();
