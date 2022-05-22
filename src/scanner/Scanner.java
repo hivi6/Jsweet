@@ -242,7 +242,6 @@ public class Scanner {
     }
 
     private void identifier() {
-        advance(); // first character will be a letter or an underscore(_)
         while (!isEnd() && (Character.isLetter(peek()) || Character.isDigit(peek()) || peek() == '_'))
             advance();
 
