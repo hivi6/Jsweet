@@ -1,6 +1,9 @@
 
 /*
     program             -> statement* EOF ;
+    declaration         -> varDeclaration
+                         | statement ;
+    varDeclaration      -> "var" IDENTIFIER ("=" ternary)* ";" ;
     statement           -> expressionStatement
                          | printStatement ;
     expressionStatement -> expression ;
@@ -16,7 +19,7 @@
     unary               -> ( "!" | "-" ) unary
                          | primary ;
     primary             -> NUMBER | STRING | "true" | "false" | "nil"
-                         | "(" expression ")" ;
+                         | "(" expression ")" | IDENTIFIER ;
 */
 
 package parser;
@@ -33,6 +36,8 @@ import ast.PrintStmt;
 import ast.Stmt;
 import ast.TernaryExpr;
 import ast.UnaryExpr;
+import ast.VarExpr;
+import ast.VarStmt;
 import runtime.SweetRuntime;
 import token.Token;
 import token.TokenType;
@@ -49,12 +54,8 @@ public class Parser {
 
     public List<Stmt> parse() {
         List<Stmt> stmts = new ArrayList<>();
-        try {
-            while (!isEnd()) {
-                stmts.add(statement());
-            }
-        } catch (ParseError e) {
-
+        while (!isEnd()) {
+            stmts.add(declaration());
         }
         return stmts;
     }
@@ -62,6 +63,26 @@ public class Parser {
     // **********
     // Just Converting the grammar to functions
     // **********
+
+    private Stmt declaration() {
+        try {
+            if (match(VAR))
+                return varDeclaration();
+            return statement();
+        } catch (ParseError e) {
+            synchronize();
+            return null;
+        }
+    }
+
+    private Stmt varDeclaration() {
+        Token name = consume(IDENTIFIER, "Expected a variable name.");
+        Expr initializer = null;
+        if (match(EQUAL))
+            initializer = ternary();
+        consume(SEMICOLON, "Expected ';' after variable declaration.");
+        return new VarStmt(name, initializer);
+    }
 
     private Stmt statement() {
         if (match(PRINT))
@@ -180,6 +201,8 @@ public class Parser {
             consume(RPAREN, "Expected ')' after expression");
             return new GroupExpr(expr);
         }
+        if (match(IDENTIFIER))
+            return new VarExpr(previous());
         throw error(peek(), "Expect expression.");
     }
 

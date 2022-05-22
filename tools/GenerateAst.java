@@ -99,10 +99,12 @@ public class GenerateAst {
                 "TernaryExpr    : Expr cond, Expr trueExpr, Expr falseExpr",
                 "UnaryExpr      : Token op, Expr right",
                 "GroupExpr      : Expr expr",
-                "LiteralExpr    : Object val"));
+                "LiteralExpr    : Object val",
+                "VarExpr        : Token name"));
 
         defineAst(srcPath, "Stmt", Arrays.asList(
                 "ExprStmt       : Expr expr",
-                "PrintStmt      : List<Expr> arguments"));
+                "PrintStmt      : List<Expr> arguments",
+                "VarStmt        : Token name, Expr initializer"));
     }
 }

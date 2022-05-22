@@ -9,7 +9,6 @@ import parser.Parser;
 import scanner.Scanner;
 import token.Token;
 import ast.AstPrinter;
-import ast.Expr;
 
 public class ParserTest {
     public static void main(String[] args) throws IOException {
@@ -25,6 +24,8 @@ public class ParserTest {
             Scanner scanner = new Scanner(source);
             List<Token> tokens = scanner.getTokens();
             Parser parser = new Parser(tokens);
+
+            System.out.print(new AstPrinter(parser.parse()));
         }
     }
 }

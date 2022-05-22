@@ -11,6 +11,8 @@ import ast.PrintStmt;
 import ast.Stmt;
 import ast.TernaryExpr;
 import ast.UnaryExpr;
+import ast.VarExpr;
+import ast.VarStmt;
 import runtime.SweetRuntime;
 import runtime.SwtRuntimeError;
 import token.Token;
@@ -19,6 +21,8 @@ import visitor.ExprVisitor;
 import visitor.StmtVisitor;
 
 public class Interpreter implements ExprVisitor<Object>, StmtVisitor<Void> {
+    private Environment environment = new Environment();
+
     public void interpret(List<Stmt> statements) {
         try {
             for (Stmt statement : statements) {
@@ -160,6 +164,11 @@ public class Interpreter implements ExprVisitor<Object>, StmtVisitor<Void> {
     }
 
     @Override
+    public Object visit(VarExpr expr) {
+        return environment.get(expr.name);
+    }
+
+    @Override
     public Void visit(ExprStmt stmt) {
         evaluate(stmt.expr);
         return null;
@@ -173,6 +182,15 @@ public class Interpreter implements ExprVisitor<Object>, StmtVisitor<Void> {
             System.out.print(evaluate(stmt.arguments.get(i)));
         }
         System.out.println();
+        return null;
+    }
+
+    @Override
+    public Void visit(VarStmt stmt) {
+        Object value = null;
+        if (stmt.initializer != null)
+            value = evaluate(stmt.initializer);
+        environment.define(stmt.name.lexeme, value);
         return null;
     }
 
