@@ -1,3 +1,7 @@
+22.05.2022
+- [x] Add multiple Variable declaration
+- [] Add assignment expression
+
 18.05.2022
 - [x] Handling multiple line comment
 - [x] Simple Parser

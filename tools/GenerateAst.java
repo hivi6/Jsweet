@@ -14,6 +14,7 @@ public class GenerateAst {
         writer.println();
         writer.println("import java.util.List;");
         writer.println();
+        writer.println("import util.Pair;");
         writer.println("import token.Token;");
         writer.println("import visitor." + visitorName + ";");
         writer.println();
@@ -21,7 +22,7 @@ public class GenerateAst {
         writer.println("public class " + className + " extends " + baseName + " {");
 
         // constructor
-        writer.println("    public " + className + "(" + fieldLists + ") {");
+        writer.println("    public " + className + "(" + fieldLists.replace("|", ",") + ") {");
         String[] fields = fieldLists.split(", ");
         for (String field : fields) {
             String name = field.split(" ")[1];
@@ -39,7 +40,7 @@ public class GenerateAst {
         // Fields
         writer.println();
         for (String field : fields) {
-            writer.println("    public final " + field + ";");
+            writer.println("    public final " + field.replace("|", ",") + ";");
         }
         writer.println("}");
         writer.close();
@@ -105,6 +106,6 @@ public class GenerateAst {
         defineAst(srcPath, "Stmt", Arrays.asList(
                 "ExprStmt       : Expr expr",
                 "PrintStmt      : List<Expr> arguments",
-                "VarStmt        : Token name, Expr initializer"));
+                "VarStmt        : List<Pair<Token|Expr>> vars")); // here ',' is a first separator, so using '|'
     }
 }

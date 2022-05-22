@@ -76,8 +76,8 @@ public class AstPrinter implements ExprVisitor<String>, StmtVisitor<String> {
 
     @Override
     public String visit(VarStmt stmt) {
-        return "(var " + stmt.name.lexeme +
-                " " + (stmt.initializer == null ? "null" : evaluate(stmt.initializer)) + ")\n";
+        // TODO
+        return null;
     }
 
     @Override

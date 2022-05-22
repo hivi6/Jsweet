@@ -17,6 +17,7 @@ import runtime.SweetRuntime;
 import runtime.SwtRuntimeError;
 import token.Token;
 import types.SwtString;
+import util.Pair;
 import visitor.ExprVisitor;
 import visitor.StmtVisitor;
 
@@ -187,10 +188,12 @@ public class Interpreter implements ExprVisitor<Object>, StmtVisitor<Void> {
 
     @Override
     public Void visit(VarStmt stmt) {
-        Object value = null;
-        if (stmt.initializer != null)
-            value = evaluate(stmt.initializer);
-        environment.define(stmt.name.lexeme, value);
+        for (Pair<Token, Expr> p : stmt.vars) {
+            Object value = null;
+            if (p.second != null)
+                value = evaluate(p.second);
+            environment.define(p.first.lexeme, value);
+        }
         return null;
     }
 

@@ -3,7 +3,7 @@
     program             -> statement* EOF ;
     declaration         -> varDeclaration
                          | statement ;
-    varDeclaration      -> "var" IDENTIFIER ("=" ternary)* ";" ;
+    varDeclaration      -> "var" IDENTIFIER ("=" ternary)? ("," IDENTIFIER ("=" ternary))* ";" ;
     statement           -> expressionStatement
                          | printStatement ;
     expressionStatement -> expression ;
@@ -41,6 +41,7 @@ import ast.VarStmt;
 import runtime.SweetRuntime;
 import token.Token;
 import token.TokenType;
+import util.Pair;
 
 import static token.TokenType.*;
 
@@ -76,12 +77,16 @@ public class Parser {
     }
 
     private Stmt varDeclaration() {
-        Token name = consume(IDENTIFIER, "Expected a variable name.");
-        Expr initializer = null;
-        if (match(EQUAL))
-            initializer = ternary();
+        List<Pair<Token, Expr>> vars = new ArrayList<>();
+        do {
+            Token name = consume(IDENTIFIER, "Expected a variable name.");
+            Expr initializer = null;
+            if (match(EQUAL))
+                initializer = ternary();
+            vars.add(new Pair<>(name, initializer));
+        } while (match(COMMA));
         consume(SEMICOLON, "Expected ';' after variable declaration.");
-        return new VarStmt(name, initializer);
+        return new VarStmt(vars);
     }
 
     private Stmt statement() {
