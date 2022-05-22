@@ -6,4 +6,5 @@ public interface StmtVisitor<R> {
     R visit (ExprStmt stmt);
     R visit (PrintStmt stmt);
     R visit (VarStmt stmt);
+    R visit (BlockStmt stmt);
 }

@@ -2,7 +2,9 @@ package interpreter;
 
 import java.util.List;
 
+import ast.AssignExpr;
 import ast.BinaryExpr;
+import ast.BlockStmt;
 import ast.Expr;
 import ast.ExprStmt;
 import ast.GroupExpr;
@@ -170,6 +172,13 @@ public class Interpreter implements ExprVisitor<Object>, StmtVisitor<Void> {
     }
 
     @Override
+    public Object visit(AssignExpr expr) {
+        Object value = evaluate(expr.value);
+        environment.assign(expr.name, value);
+        return value;
+    }
+
+    @Override
     public Void visit(ExprStmt stmt) {
         evaluate(stmt.expr);
         return null;
@@ -194,6 +203,12 @@ public class Interpreter implements ExprVisitor<Object>, StmtVisitor<Void> {
                 value = evaluate(p.second);
             environment.define(p.first.lexeme, value);
         }
+        return null;
+    }
+
+    @Override
+    public Void visit(BlockStmt stmt) {
+        executeBlock(stmt.statements, new Environment(environment));
         return null;
     }
 
@@ -231,7 +246,7 @@ public class Interpreter implements ExprVisitor<Object>, StmtVisitor<Void> {
             return false;
         if (isBoolean(val))
             return (boolean) val;
-        return !(val.equals(0) || val.equals(""));
+        return !(val.equals(0) || val.equals(new SwtString()));
     }
 
     private boolean isEqual(Object left, Object right) {
@@ -248,5 +263,16 @@ public class Interpreter implements ExprVisitor<Object>, StmtVisitor<Void> {
 
     private void execute(Stmt stmt) {
         stmt.accept(this);
+    }
+
+    private void executeBlock(List<Stmt> stmts, Environment environment) {
+        Environment previous = this.environment;
+        try {
+            this.environment = environment;
+            for (Stmt stmt : stmts)
+                execute(stmt);
+        } finally {
+            this.environment = previous;
+        }
     }
 }

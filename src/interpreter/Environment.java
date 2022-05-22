@@ -7,9 +7,15 @@ import runtime.SwtRuntimeError;
 import token.Token;
 
 public class Environment {
+    private Environment enclosing;
     private final Map<String, Object> values = new HashMap<>();
 
     public Environment() {
+        enclosing = null;
+    }
+
+    public Environment(Environment enclosing) {
+        this.enclosing = enclosing;
     }
 
     public void define(String name, Object value) {
@@ -19,6 +25,24 @@ public class Environment {
     public Object get(Token name) {
         if (values.containsKey(name.lexeme))
             return values.get(name.lexeme);
+
+        if (enclosing != null)
+            return enclosing.get(name);
+
+        throw new SwtRuntimeError(name, "Undefined variable '" + name.lexeme + "'.");
+    }
+
+    public void assign(Token name, Object value) {
+        if (values.containsKey(name.lexeme)) {
+            values.put(name.lexeme, value);
+            return;
+        }
+
+        if (enclosing != null) {
+            enclosing.assign(name, value);
+            return;
+        }
+
         throw new SwtRuntimeError(name, "Undefined variable '" + name.lexeme + "'.");
     }
 }

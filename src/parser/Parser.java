@@ -3,14 +3,18 @@
     program             -> statement* EOF ;
     declaration         -> varDeclaration
                          | statement ;
-    varDeclaration      -> "var" IDENTIFIER ("=" ternary)? ("," IDENTIFIER ("=" ternary))* ";" ;
+    varDeclaration      -> "var" IDENTIFIER ("=" assignment)? ("," IDENTIFIER ("=" assignment))* ";" ;
     statement           -> expressionStatement
-                         | printStatement ;
+                         | printStatement
+                         | block ;
     expressionStatement -> expression ;
     printStatement      -> "print" arguments* ";" ;
+    block               -> "{" declaration* "}" ;
     arguments           -> ternary ("," ternary)* ;
     expression          -> comma ;
-    comma               -> ternary ("," ternary)* ;
+    comma               -> assignment ("," assignment)* ;
+    assignment          -> IDENTIFIER "=" assignment
+                         | ternary ;
     ternary             -> equality ("?" expression ":" ternary)? ;
     equality            -> comparison ( ( "!=" | "==" ) comparison )* ;
     comparison          -> term ( ( ">" | ">=" | "<" | "<=" ) term )* ;
@@ -27,7 +31,9 @@ package parser;
 import java.util.ArrayList;
 import java.util.List;
 
+import ast.AssignExpr;
 import ast.BinaryExpr;
+import ast.BlockStmt;
 import ast.Expr;
 import ast.ExprStmt;
 import ast.GroupExpr;
@@ -82,7 +88,7 @@ public class Parser {
             Token name = consume(IDENTIFIER, "Expected a variable name.");
             Expr initializer = null;
             if (match(EQUAL))
-                initializer = ternary();
+                initializer = assignment();
             vars.add(new Pair<>(name, initializer));
         } while (match(COMMA));
         consume(SEMICOLON, "Expected ';' after variable declaration.");
@@ -92,6 +98,8 @@ public class Parser {
     private Stmt statement() {
         if (match(PRINT))
             return printStatement();
+        if (match(LBRACE))
+            return new BlockStmt(block());
         return expressionStatement();
     }
 
@@ -111,11 +119,20 @@ public class Parser {
 
     private List<Expr> arguments() {
         List<Expr> args = new ArrayList<>();
-        args.add(ternary());
+        args.add(assignment());
         while (match(COMMA)) {
-            args.add(ternary());
+            args.add(assignment());
         }
         return args;
+    }
+
+    private List<Stmt> block() {
+        List<Stmt> statements = new ArrayList<>();
+        while (!check(RBRACE) && !isEnd()) {
+            statements.add(declaration());
+        }
+        consume(RBRACE, "Expect '}' after block.");
+        return statements;
     }
 
     private Expr expression() {
@@ -123,13 +140,27 @@ public class Parser {
     }
 
     private Expr comma() {
-        Expr left = ternary();
+        Expr left = assignment();
         while (match(COMMA)) {
             Token op = previous();
-            Expr right = ternary();
+            Expr right = assignment();
             left = new BinaryExpr(left, op, right);
         }
         return left;
+    }
+
+    private Expr assignment() {
+        Expr expr = ternary();
+        if (match(EQUAL)) {
+            Token equals = previous();
+            Expr value = assignment();
+            if (expr instanceof VarExpr) {
+                Token name = ((VarExpr) expr).name;
+                return new AssignExpr(name, value);
+            }
+            error(equals, "Invalid assignment target");
+        }
+        return expr;
     }
 
     private Expr ternary() {

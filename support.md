@@ -38,8 +38,11 @@
     1. [x] Relational Support
     1. [x] Comma Expression Support
     1. [x] Conditional expression Support
+    1. [x] Assignment
 1. [] Statement Support
-    1. [] Print Statement
+    1. [x] Print Statement
+    1. [x] Multiple Variable Declaration
+    1. [x] Block Support
 
 # Interpreter
 [x] Workable Interpreter?
@@ -50,9 +53,12 @@
     1. [] Logical expression
     1. [x] Comma expression
     1. [x] Conditional expression
+    1. [x] Assignment
     1. [] Functional expression
 1. [] Evaluate Statement
     1. [x] Expression Statement
     1. [x] Print Statement
     1. [x] Variable Declaration
-    1. [] Multiple Variable declaration at once.
+    1. [x] Multiple Variable declaration at once.
+    1. [x] Block Support
+    1. [] Condition support

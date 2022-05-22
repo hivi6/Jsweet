@@ -96,6 +96,7 @@ public class GenerateAst {
     public static void main(String args[]) throws IOException {
         String srcPath = "D:/Development/project/jsweet/src";
         defineAst(srcPath, "Expr", Arrays.asList(
+                "AssignExpr     : Token name, Expr value",
                 "BinaryExpr     : Expr left, Token op, Expr right",
                 "TernaryExpr    : Expr cond, Expr trueExpr, Expr falseExpr",
                 "UnaryExpr      : Token op, Expr right",
@@ -106,6 +107,7 @@ public class GenerateAst {
         defineAst(srcPath, "Stmt", Arrays.asList(
                 "ExprStmt       : Expr expr",
                 "PrintStmt      : List<Expr> arguments",
-                "VarStmt        : List<Pair<Token|Expr>> vars")); // here ',' is a first separator, so using '|'
+                "VarStmt        : List<Pair<Token|Expr>> vars",  // here ',' is a first separator, so using '|'
+                "BlockStmt      : List<Stmt> statements"));
     }
 }

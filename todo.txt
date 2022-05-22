@@ -1,6 +1,7 @@
 22.05.2022
 - [x] Add multiple Variable declaration
-- [] Add assignment expression
+- [x] Add assignment expression
+- [x] Add Scope Block
 
 18.05.2022
 - [x] Handling multiple line comment
