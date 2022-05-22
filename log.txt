@@ -1,7 +1,17 @@
+22.05.2022
+Fixed bug related to Scanner (
+    For "a=" the scanner was creating only one Token i.e. Token(IDENTIFIER, "a=")
+    it was because of a advance statement in the identifier() function(was in first line).
+    My logic was wrong, in the getToken() function when char ch = advance(); is done then itself
+    we go to the next token so inside identifier() the call to advance() was unrequired.
+    T.T
+)
+Added Variable declaration.
+
 19.05.2022
 Add interpreter for expression evaluation
 # Aimer marathon
-Adding support of Statements and variable declarations
+Adding support of Statements
 Added addition of string and number
 
 18.05.2022

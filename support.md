@@ -54,4 +54,5 @@
 1. [] Evaluate Statement
     1. [x] Expression Statement
     1. [x] Print Statement
-    1. [] Variable Declaration
+    1. [x] Variable Declaration
+    1. [] Multiple Variable declaration at once.
