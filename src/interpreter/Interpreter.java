@@ -8,7 +8,9 @@ import ast.BlockStmt;
 import ast.Expr;
 import ast.ExprStmt;
 import ast.GroupExpr;
+import ast.IfStmt;
 import ast.LiteralExpr;
+import ast.LogicalExpr;
 import ast.PrintStmt;
 import ast.Stmt;
 import ast.TernaryExpr;
@@ -122,6 +124,19 @@ public class Interpreter implements ExprVisitor<Object>, StmtVisitor<Void> {
     }
 
     @Override
+    public Object visit(LogicalExpr expr) {
+        switch (expr.op.type) {
+            case OR:
+                return isTrue(evaluate(expr.left)) || isTrue(evaluate(expr.right));
+            case AND:
+                return isTrue(evaluate(expr.left)) && isTrue(evaluate(expr.right));
+            default:
+                break;
+        }
+        return null; // Unreachable
+    }
+
+    @Override
     public Object visit(TernaryExpr expr) {
         /*
          * Let's say we evaluate,
@@ -209,6 +224,16 @@ public class Interpreter implements ExprVisitor<Object>, StmtVisitor<Void> {
     @Override
     public Void visit(BlockStmt stmt) {
         executeBlock(stmt.statements, new Environment(environment));
+        return null;
+    }
+
+    @Override
+    public Void visit(IfStmt stmt) {
+        Object condi = evaluate(stmt.cond);
+        if (isTrue(condi))
+            execute(stmt.thenStmt);
+        else if (stmt.elseStmt != null)
+            execute(stmt.elseStmt);
         return null;
     }
 

@@ -1,3 +1,13 @@
+23.05.2022
+- [x] Add if statement
+- [x] Add conditional and, or
+- [] Add loops Statements
+    - [] For loops
+    - [] While loops
+    - [] Do while loops
+    - [] Repeat loops
+- [] Add break and continue Statements
+
 22.05.2022
 - [x] Add multiple Variable declaration
 - [x] Add assignment expression

@@ -5,6 +5,7 @@ import ast.*;
 public interface ExprVisitor<R> {
     R visit (AssignExpr expr);
     R visit (BinaryExpr expr);
+    R visit (LogicalExpr expr);
     R visit (TernaryExpr expr);
     R visit (UnaryExpr expr);
     R visit (GroupExpr expr);

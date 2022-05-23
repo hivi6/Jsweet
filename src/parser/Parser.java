@@ -6,16 +6,20 @@
     varDeclaration      -> "var" IDENTIFIER ("=" assignment)? ("," IDENTIFIER ("=" assignment))* ";" ;
     statement           -> expressionStatement
                          | printStatement
-                         | block ;
+                         | block 
+                         | ifStatement;
     expressionStatement -> expression ;
     printStatement      -> "print" arguments* ";" ;
     block               -> "{" declaration* "}" ;
+    ifStatement         -> "if" "(" expression ")" statement ("else" statement)? ;
     arguments           -> ternary ("," ternary)* ;
     expression          -> comma ;
     comma               -> assignment ("," assignment)* ;
     assignment          -> IDENTIFIER "=" assignment
                          | ternary ;
-    ternary             -> equality ("?" expression ":" ternary)? ;
+    ternary             -> logicalOr ("?" expression ":" ternary)? ;
+    logicalOr           -> logicalAnd ( "or" logicalAnd )* ;
+    logicalAnd          -> equality ( "and" equality )* ;
     equality            -> comparison ( ( "!=" | "==" ) comparison )* ;
     comparison          -> term ( ( ">" | ">=" | "<" | "<=" ) term )* ;
     term                -> factor ( ( "-" | "+" ) factor )* ;
@@ -37,7 +41,9 @@ import ast.BlockStmt;
 import ast.Expr;
 import ast.ExprStmt;
 import ast.GroupExpr;
+import ast.IfStmt;
 import ast.LiteralExpr;
+import ast.LogicalExpr;
 import ast.PrintStmt;
 import ast.Stmt;
 import ast.TernaryExpr;
@@ -100,6 +106,8 @@ public class Parser {
             return printStatement();
         if (match(LBRACE))
             return new BlockStmt(block());
+        if (match(IF))
+            return ifStatement();
         return expressionStatement();
     }
 
@@ -135,6 +143,18 @@ public class Parser {
         return statements;
     }
 
+    private Stmt ifStatement() {
+        consume(LPAREN, "Expect '(' after if keyword.");
+        Expr cond = expression();
+        consume(RPAREN, "Expect ')' after condition.");
+        Stmt thenStmt = statement();
+        Stmt elseStmt = null;
+        if (match(ELSE)) {
+            elseStmt = statement();
+        }
+        return new IfStmt(cond, thenStmt, elseStmt);
+    }
+
     private Expr expression() {
         return comma();
     }
@@ -164,7 +184,7 @@ public class Parser {
     }
 
     private Expr ternary() {
-        Expr expr = equality();
+        Expr expr = logicalOr();
         if (match(QMARK)) {
             Expr trueExpr = expression();
             consume(COLON, "Expected ':' inside a conditional expression.");
@@ -172,6 +192,26 @@ public class Parser {
             expr = new TernaryExpr(expr, trueExpr, falseExpr);
         }
         return expr;
+    }
+
+    private Expr logicalOr() {
+        Expr left = logicalAnd();
+        while (match(OR)) {
+            Token op = previous();
+            Expr right = logicalOr();
+            left = new LogicalExpr(left, op, right);
+        }
+        return left;
+    }
+
+    private Expr logicalAnd() {
+        Expr left = equality();
+        while (match(AND)) {
+            Token op = previous();
+            Expr right = equality();
+            left = new LogicalExpr(left, op, right);
+        }
+        return left;
     }
 
     private Expr equality() {

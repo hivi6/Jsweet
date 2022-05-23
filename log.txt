@@ -1,3 +1,6 @@
+23.05.2022
+Added IF Statements and logical "and" and "or" operator
+
 22.05.2022
 Fixed bug related to Scanner (
     For "a=" the scanner was creating only one Token i.e. Token(IDENTIFIER, "a=")

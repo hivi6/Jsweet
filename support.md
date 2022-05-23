@@ -55,10 +55,12 @@
     1. [x] Conditional expression
     1. [x] Assignment
     1. [] Functional expression
+    1. [x] Conditional operators like and, or
 1. [] Evaluate Statement
     1. [x] Expression Statement
     1. [x] Print Statement
     1. [x] Variable Declaration
     1. [x] Multiple Variable declaration at once.
     1. [x] Block Support
-    1. [] Condition support
+    1. [x] if statment support
+    1. [] Loop Support

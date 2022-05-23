@@ -98,6 +98,7 @@ public class GenerateAst {
         defineAst(srcPath, "Expr", Arrays.asList(
                 "AssignExpr     : Token name, Expr value",
                 "BinaryExpr     : Expr left, Token op, Expr right",
+                "LogicalExpr     : Expr left, Token op, Expr right",
                 "TernaryExpr    : Expr cond, Expr trueExpr, Expr falseExpr",
                 "UnaryExpr      : Token op, Expr right",
                 "GroupExpr      : Expr expr",
@@ -108,6 +109,7 @@ public class GenerateAst {
                 "ExprStmt       : Expr expr",
                 "PrintStmt      : List<Expr> arguments",
                 "VarStmt        : List<Pair<Token|Expr>> vars",  // here ',' is a first separator, so using '|'
-                "BlockStmt      : List<Stmt> statements"));
+                "BlockStmt      : List<Stmt> statements",
+                "IfStmt         : Expr cond, Stmt thenStmt, Stmt elseStmt"));
     }
 }
