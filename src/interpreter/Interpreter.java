@@ -5,6 +5,8 @@ import java.util.List;
 import ast.AssignExpr;
 import ast.BinaryExpr;
 import ast.BlockStmt;
+import ast.BreakStmt;
+import ast.ContinueStmt;
 import ast.Expr;
 import ast.ExprStmt;
 import ast.ForStmt;
@@ -19,6 +21,8 @@ import ast.UnaryExpr;
 import ast.VarExpr;
 import ast.VarStmt;
 import ast.WhileStmt;
+import runtime.BreakException;
+import runtime.ContinueException;
 import runtime.SweetRuntime;
 import runtime.SwtRuntimeError;
 import token.Token;
@@ -243,7 +247,12 @@ public class Interpreter implements ExprVisitor<Object>, StmtVisitor<Void> {
     @Override
     public Void visit(WhileStmt stmt) {
         while (isTrue(evaluate(stmt.cond))) {
-            execute(stmt.stmt);
+            try {
+                execute(stmt.stmt);
+            } catch (BreakException e) {
+                break;
+            } catch (ContinueException e) {
+            }
         }
         return null;
     }
@@ -256,7 +265,12 @@ public class Interpreter implements ExprVisitor<Object>, StmtVisitor<Void> {
             if (stmt.initializer != null)
                 execute(stmt.initializer);
             while (isTrue(evaluate(stmt.cond))) {
-                execute(stmt.body);
+                try {
+                    execute(stmt.body);
+                } catch (BreakException e) {
+                    break;
+                } catch (ContinueException e) {
+                }
                 if (stmt.increment != null)
                     evaluate(stmt.increment);
             }
@@ -264,6 +278,16 @@ public class Interpreter implements ExprVisitor<Object>, StmtVisitor<Void> {
             this.environment = previous;
         }
         return null;
+    }
+
+    @Override
+    public Void visit(BreakStmt stmt) {
+        throw new BreakException();
+    }
+
+    @Override
+    public Void visit(ContinueStmt stmt) {
+        throw new ContinueException();
     }
 
     // **********

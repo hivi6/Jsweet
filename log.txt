@@ -2,6 +2,7 @@
 Added IF Statements and logical "and" and "or" operator
 Added WHILE Statements
 Added For Statements
+Added Break and Continue Statements
 
 22.05.2022
 Fixed bug related to Scanner (

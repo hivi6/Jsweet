@@ -38,6 +38,8 @@ public class Scanner {
         keywords.put("class", CLASS);
         keywords.put("super", SUPER);
         keywords.put("this", THIS);
+        keywords.put("break", BREAK);
+        keywords.put("continue", CONTINUE);
     }
 
     public Scanner(String source) {

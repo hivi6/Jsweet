@@ -23,7 +23,7 @@ public class GenerateAst {
 
         // constructor
         writer.println("    public " + className + "(" + fieldLists.replace("|", ",") + ") {");
-        String[] fields = fieldLists.split(", ");
+        String[] fields = (fieldLists.isEmpty() ? new String[0] : fieldLists.split(", "));
         for (String field : fields) {
             String name = field.split(" ")[1];
             writer.println("        this." + name + " = " + name + ";");
@@ -108,10 +108,12 @@ public class GenerateAst {
         defineAst(srcPath, "Stmt", Arrays.asList(
                 "ExprStmt       : Expr expr",
                 "PrintStmt      : List<Expr> arguments",
-                "VarStmt        : List<Pair<Token|Expr>> vars",  // here ',' is a first separator, so using '|'
+                "VarStmt        : List<Pair<Token|Expr>> vars", // here ',' is a first separator, so using '|'
                 "BlockStmt      : List<Stmt> statements",
                 "IfStmt         : Expr cond, Stmt thenStmt, Stmt elseStmt",
                 "WhileStmt      : Expr cond, Stmt stmt",
-                "ForStmt        : Stmt initializer, Expr cond, Expr increment, Stmt body"));
+                "ForStmt        : Stmt initializer, Expr cond, Expr increment, Stmt body",
+                "BreakStmt      : ",
+                "ContinueStmt   : "));
     }
 }

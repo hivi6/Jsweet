@@ -62,7 +62,10 @@
     1. [x] Variable Declaration
     1. [x] Multiple Variable declaration at once.
     1. [x] Block Support
-    1. [x] if statment support
+    1. [x] if-else statment support
     1. [] Loop Support
         - [x] While Loop
         - [x] For Loop
+        - [] do while loop
+        - [] repeat loop
+    1. [x] Break and continue support

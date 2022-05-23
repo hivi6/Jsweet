@@ -6,7 +6,7 @@
     - [x] While loops
     - [] Do while loops
     - [] Repeat loops
-- [] Add break and continue Statements
+- [x] Add break and continue Statements
 
 22.05.2022
 - [x] Add multiple Variable declaration

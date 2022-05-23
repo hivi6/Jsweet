@@ -9,7 +9,9 @@
                          | block 
                          | ifStatement
                          | whileStatement
-                         | forStatement ;
+                         | forStatement
+                         | breakStatement
+                         | continueStatement ;
     expressionStatement -> expression ;
     printStatement      -> "print" arguments* ";" ;
     arguments           -> ternary ("," ternary)* ;
@@ -18,6 +20,8 @@
     whileStatement      -> "while" "(" expression ")" statement ;
     forStatement        -> "for" "(" (varDeclaration | expressionStatement | ";") expression? ";" expression? ")"
                            statement ;
+    breakStatement      -> "break" ;
+    continueStatement   -> "continue" ;
     expression          -> comma ;
     comma               -> assignment ("," assignment)* ;
     assignment          -> IDENTIFIER "=" assignment
@@ -43,6 +47,8 @@ import java.util.List;
 import ast.AssignExpr;
 import ast.BinaryExpr;
 import ast.BlockStmt;
+import ast.BreakStmt;
+import ast.ContinueStmt;
 import ast.Expr;
 import ast.ExprStmt;
 import ast.ForStmt;
@@ -67,6 +73,7 @@ import static token.TokenType.*;
 public class Parser {
     private final List<Token> tokens;
     private int current = 0;
+    private int loopDepth = 0;
 
     public Parser(List<Token> tokens) {
         this.tokens = tokens;
@@ -119,6 +126,10 @@ public class Parser {
             return whileStatement();
         if (match(FOR))
             return forStatement();
+        if (match(BREAK))
+            return breakStatement();
+        if (match(CONTINUE))
+            return continueStatement();
         return expressionStatement();
     }
 
@@ -167,36 +178,62 @@ public class Parser {
     }
 
     private Stmt whileStatement() {
-        consume(LPAREN, "Expect '(' after while keyword.");
-        Expr cond = expression();
-        consume(RPAREN, "Expect ')' after while condition.");
-        Stmt stmt = statement();
-        return new WhileStmt(cond, stmt);
+        try {
+            loopDepth++;
+            consume(LPAREN, "Expect '(' after while keyword.");
+            Expr cond = expression();
+            consume(RPAREN, "Expect ')' after while condition.");
+            Stmt stmt = statement();
+            return new WhileStmt(cond, stmt);
+        } finally {
+            loopDepth--;
+        }
     }
 
     private Stmt forStatement() {
-        consume(LPAREN, "Expect '(' after for keyword.");
-        Stmt initializer;
-        if (match(SEMICOLON))
-            initializer = null;
-        else if (match(VAR))
-            initializer = varDeclaration();
-        else
-            initializer = expressionStatement();
+        try {
+            loopDepth++;
+            consume(LPAREN, "Expect '(' after for keyword.");
+            Stmt initializer;
+            if (match(SEMICOLON))
+                initializer = null;
+            else if (match(VAR))
+                initializer = varDeclaration();
+            else
+                initializer = expressionStatement();
 
-        Expr cond = new LiteralExpr(true); // if no condition then true
-        if (!check(SEMICOLON))
-            cond = expression();
-        consume(SEMICOLON, "Expect ';' after for condition expression.");
+            Expr cond = new LiteralExpr(true); // if no condition then true
+            if (!check(SEMICOLON))
+                cond = expression();
+            consume(SEMICOLON, "Expect ';' after for condition expression.");
 
-        Expr increment = null;
-        if (!check(RPAREN))
-            increment = expression();
-        consume(RPAREN, "Expect ')' after for increment expression.");
+            Expr increment = null;
+            if (!check(RPAREN))
+                increment = expression();
+            consume(RPAREN, "Expect ')' after for increment expression.");
 
-        Stmt body = statement();
+            Stmt body = statement();
 
-        return new ForStmt(initializer, cond, increment, body);
+            return new ForStmt(initializer, cond, increment, body);
+        } finally {
+            loopDepth--;
+        }
+    }
+
+    private Stmt breakStatement() {
+        if (loopDepth <= 0) {
+            throw error(previous(), "'break' cannot be used outside loops.");
+        }
+        consume(SEMICOLON, "Expect ';' after break keyword.");
+        return new BreakStmt();
+    }
+
+    private Stmt continueStatement() {
+        if (loopDepth <= 0) {
+            throw error(previous(), "'continue' cannot be used outside loops.");
+        }
+        consume(SEMICOLON, "Expect ';' after continue keyword.");
+        return new ContinueStmt();
     }
 
     private Expr expression() {
