@@ -7,6 +7,7 @@ import ast.BinaryExpr;
 import ast.BlockStmt;
 import ast.Expr;
 import ast.ExprStmt;
+import ast.ForStmt;
 import ast.GroupExpr;
 import ast.IfStmt;
 import ast.LiteralExpr;
@@ -243,6 +244,17 @@ public class Interpreter implements ExprVisitor<Object>, StmtVisitor<Void> {
     public Void visit(WhileStmt stmt) {
         while (isTrue(evaluate(stmt.cond))) {
             execute(stmt.stmt);
+        }
+        return null;
+    }
+
+    @Override
+    public Void visit(ForStmt stmt) {
+        if (stmt.initializer != null)
+            execute(stmt.initializer);
+        while (isTrue(evaluate(stmt.cond))) {
+            execute(stmt.body);
+            evaluate(stmt.increment);
         }
         return null;
     }

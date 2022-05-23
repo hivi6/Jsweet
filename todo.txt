@@ -2,7 +2,7 @@
 - [x] Add if statement
 - [x] Add logical and, or
 - [] Add loops Statements
-    - [] For loops
+    - [x] For loops
     - [x] While loops
     - [] Do while loops
     - [] Repeat loops

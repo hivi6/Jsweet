@@ -111,6 +111,7 @@ public class GenerateAst {
                 "VarStmt        : List<Pair<Token|Expr>> vars",  // here ',' is a first separator, so using '|'
                 "BlockStmt      : List<Stmt> statements",
                 "IfStmt         : Expr cond, Stmt thenStmt, Stmt elseStmt",
-                "WhileStmt      : Expr cond, Stmt stmt"));
+                "WhileStmt      : Expr cond, Stmt stmt",
+                "ForStmt        : Stmt initializer, Expr cond, Expr increment, Stmt body"));
     }
 }

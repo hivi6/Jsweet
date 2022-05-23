@@ -65,3 +65,4 @@
     1. [x] if statment support
     1. [] Loop Support
         - [x] While Loop
+        - [x] For Loop

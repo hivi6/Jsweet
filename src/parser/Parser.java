@@ -8,13 +8,16 @@
                          | printStatement
                          | block 
                          | ifStatement
-                         | whileStatement ;
+                         | whileStatement
+                         | forStatement ;
     expressionStatement -> expression ;
     printStatement      -> "print" arguments* ";" ;
     arguments           -> ternary ("," ternary)* ;
     block               -> "{" declaration* "}" ;
     ifStatement         -> "if" "(" expression ")" statement ("else" statement)? ;
     whileStatement      -> "while" "(" expression ")" statement ;
+    forStatement        -> "for" "(" (varDeclaration | expressionStatement | ";") expression? ";" expression? ")"
+                           statement ;
     expression          -> comma ;
     comma               -> assignment ("," assignment)* ;
     assignment          -> IDENTIFIER "=" assignment
@@ -42,6 +45,7 @@ import ast.BinaryExpr;
 import ast.BlockStmt;
 import ast.Expr;
 import ast.ExprStmt;
+import ast.ForStmt;
 import ast.GroupExpr;
 import ast.IfStmt;
 import ast.LiteralExpr;
@@ -113,6 +117,8 @@ public class Parser {
             return ifStatement();
         if (match(WHILE))
             return whileStatement();
+        if (match(FOR))
+            return forStatement();
         return expressionStatement();
     }
 
@@ -166,6 +172,31 @@ public class Parser {
         consume(RPAREN, "Expect ')' after while condition.");
         Stmt stmt = statement();
         return new WhileStmt(cond, stmt);
+    }
+
+    private Stmt forStatement() {
+        consume(LPAREN, "Expect '(' after for keyword.");
+        Stmt initializer;
+        if (match(SEMICOLON))
+            initializer = null;
+        else if (match(VAR))
+            initializer = varDeclaration();
+        else
+            initializer = expressionStatement();
+        
+        Expr cond = null;
+        if (!check(SEMICOLON))
+            cond = expression();
+        consume(SEMICOLON, "Expect ';' after for condition expression.");
+
+        Expr increment = null;
+        if (!check(SEMICOLON))
+            increment = expression();
+        consume(RPAREN, "Expect ')' after for increment expression.");
+
+        Stmt body = statement();
+
+        return new ForStmt(initializer, cond, increment, body);
     }
 
     private Expr expression() {
