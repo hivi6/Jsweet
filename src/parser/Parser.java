@@ -7,12 +7,14 @@
     statement           -> expressionStatement
                          | printStatement
                          | block 
-                         | ifStatement;
+                         | ifStatement
+                         | whileStatement ;
     expressionStatement -> expression ;
     printStatement      -> "print" arguments* ";" ;
+    arguments           -> ternary ("," ternary)* ;
     block               -> "{" declaration* "}" ;
     ifStatement         -> "if" "(" expression ")" statement ("else" statement)? ;
-    arguments           -> ternary ("," ternary)* ;
+    whileStatement      -> "while" "(" expression ")" statement ;
     expression          -> comma ;
     comma               -> assignment ("," assignment)* ;
     assignment          -> IDENTIFIER "=" assignment
@@ -50,6 +52,7 @@ import ast.TernaryExpr;
 import ast.UnaryExpr;
 import ast.VarExpr;
 import ast.VarStmt;
+import ast.WhileStmt;
 import runtime.SweetRuntime;
 import token.Token;
 import token.TokenType;
@@ -108,6 +111,8 @@ public class Parser {
             return new BlockStmt(block());
         if (match(IF))
             return ifStatement();
+        if (match(WHILE))
+            return whileStatement();
         return expressionStatement();
     }
 
@@ -153,6 +158,14 @@ public class Parser {
             elseStmt = statement();
         }
         return new IfStmt(cond, thenStmt, elseStmt);
+    }
+
+    private Stmt whileStatement() {
+        consume(LPAREN, "Expect '(' after while keyword.");
+        Expr cond = expression();
+        consume(RPAREN, "Expect ')' after while condition.");
+        Stmt stmt = statement();
+        return new WhileStmt(cond, stmt);
     }
 
     private Expr expression() {

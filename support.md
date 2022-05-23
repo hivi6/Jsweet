@@ -64,3 +64,4 @@
     1. [x] Block Support
     1. [x] if statment support
     1. [] Loop Support
+        - [x] While Loop

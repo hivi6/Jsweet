@@ -1,9 +1,9 @@
 23.05.2022
 - [x] Add if statement
-- [x] Add conditional and, or
+- [x] Add logical and, or
 - [] Add loops Statements
     - [] For loops
-    - [] While loops
+    - [x] While loops
     - [] Do while loops
     - [] Repeat loops
 - [] Add break and continue Statements

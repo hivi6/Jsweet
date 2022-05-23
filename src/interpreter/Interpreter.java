@@ -17,6 +17,7 @@ import ast.TernaryExpr;
 import ast.UnaryExpr;
 import ast.VarExpr;
 import ast.VarStmt;
+import ast.WhileStmt;
 import runtime.SweetRuntime;
 import runtime.SwtRuntimeError;
 import token.Token;
@@ -235,6 +236,14 @@ public class Interpreter implements ExprVisitor<Object>, StmtVisitor<Void> {
             execute(stmt.thenStmt);
         else if (stmt.elseStmt != null)
             execute(stmt.elseStmt);
+        return null;
+    }
+
+    @Override
+    public Void visit(WhileStmt stmt) {
+        while (isTrue(evaluate(stmt.cond))) {
+            execute(stmt.stmt);
+        }
         return null;
     }
 
