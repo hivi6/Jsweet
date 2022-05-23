@@ -250,11 +250,17 @@ public class Interpreter implements ExprVisitor<Object>, StmtVisitor<Void> {
 
     @Override
     public Void visit(ForStmt stmt) {
-        if (stmt.initializer != null)
-            execute(stmt.initializer);
-        while (isTrue(evaluate(stmt.cond))) {
-            execute(stmt.body);
-            evaluate(stmt.increment);
+        Environment previous = this.environment;
+        try {
+            this.environment = new Environment(this.environment);
+            if (stmt.initializer != null)
+                execute(stmt.initializer);
+            while (isTrue(evaluate(stmt.cond))) {
+                execute(stmt.body);
+                evaluate(stmt.increment);
+            }
+        } finally {
+            this.environment = previous;
         }
         return null;
     }
