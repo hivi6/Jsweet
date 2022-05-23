@@ -183,14 +183,14 @@ public class Parser {
             initializer = varDeclaration();
         else
             initializer = expressionStatement();
-        
-        Expr cond = null;
+
+        Expr cond = new LiteralExpr(true); // if no condition then true
         if (!check(SEMICOLON))
             cond = expression();
         consume(SEMICOLON, "Expect ';' after for condition expression.");
 
         Expr increment = null;
-        if (!check(SEMICOLON))
+        if (!check(RPAREN))
             increment = expression();
         consume(RPAREN, "Expect ')' after for increment expression.");
 

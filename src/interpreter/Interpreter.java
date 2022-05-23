@@ -257,7 +257,8 @@ public class Interpreter implements ExprVisitor<Object>, StmtVisitor<Void> {
                 execute(stmt.initializer);
             while (isTrue(evaluate(stmt.cond))) {
                 execute(stmt.body);
-                evaluate(stmt.increment);
+                if (stmt.increment != null)
+                    evaluate(stmt.increment);
             }
         } finally {
             this.environment = previous;
