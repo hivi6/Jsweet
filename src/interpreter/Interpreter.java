@@ -20,6 +20,7 @@ import ast.VarStmt;
 import runtime.SweetRuntime;
 import runtime.SwtRuntimeError;
 import token.Token;
+import token.TokenType;
 import types.SwtString;
 import util.Pair;
 import visitor.ExprVisitor;
@@ -125,15 +126,15 @@ public class Interpreter implements ExprVisitor<Object>, StmtVisitor<Void> {
 
     @Override
     public Object visit(LogicalExpr expr) {
-        switch (expr.op.type) {
-            case OR:
-                return isTrue(evaluate(expr.left)) || isTrue(evaluate(expr.right));
-            case AND:
-                return isTrue(evaluate(expr.left)) && isTrue(evaluate(expr.right));
-            default:
-                break;
+        Object left = evaluate(expr.left);
+        if (expr.op.type == TokenType.OR) {
+            if (isTrue(left))
+                return left;
+        } else {
+            if (!isTrue(left))
+                return left;
         }
-        return null; // Unreachable
+        return evaluate(expr.right);
     }
 
     @Override

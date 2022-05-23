@@ -271,7 +271,7 @@ public class Parser {
         if (match(FALSE))
             return new LiteralExpr(false);
         if (match(NIL))
-            return new LiteralExpr(NIL);
+            return new LiteralExpr(null);
         if (match(LPAREN)) {
             Expr expr = expression();
             consume(RPAREN, "Expected ')' after expression");
