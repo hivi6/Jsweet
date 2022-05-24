@@ -110,6 +110,7 @@ public class GenerateAst {
                 "ExprStmt       : Expr expr",
                 "PrintStmt      : List<Expr> arguments",
                 "VarStmt        : List<Pair<Token|Expr>> vars", // here ',' is a first separator, so using '|'
+                "FunStmt        : Token name, List<Token> params, List<Stmt> body",
                 "BlockStmt      : List<Stmt> statements",
                 "IfStmt         : Expr cond, Stmt thenStmt, Stmt elseStmt",
                 "WhileStmt      : Expr cond, Stmt stmt",

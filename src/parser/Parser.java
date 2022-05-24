@@ -2,8 +2,12 @@
 /*
     program             -> statement* EOF ;
     declaration         -> varDeclaration
+                         | functionDeclaration
                          | statement ;
     varDeclaration      -> "var" IDENTIFIER ("=" assignment)? ("," IDENTIFIER ("=" assignment))* ";" ;
+    functionDeclaration -> "fun" function ;
+    function            -> IDENTIFIER "(" parameters? ")" block ;
+    parameters          -> IDENTIFIER ("," IDENTIFIER)* ;
     statement           -> expressionStatement
                          | printStatement
                          | block 
@@ -54,6 +58,7 @@ import ast.ContinueStmt;
 import ast.Expr;
 import ast.ExprStmt;
 import ast.ForStmt;
+import ast.FunStmt;
 import ast.GroupExpr;
 import ast.IfStmt;
 import ast.LiteralExpr;
@@ -97,6 +102,8 @@ public class Parser {
         try {
             if (match(VAR))
                 return varDeclaration();
+            if (match(FUN))
+                return function("function");
             return statement();
         } catch (ParseError e) {
             synchronize();
@@ -115,6 +122,31 @@ public class Parser {
         } while (match(COMMA));
         consume(SEMICOLON, "Expected ';' after variable declaration.");
         return new VarStmt(vars);
+    }
+
+    private Stmt function(String kind) {
+        Token name = consume(IDENTIFIER, "Expect " + kind + " name.");
+
+        consume(LPAREN, "Expect '(' after " + kind + " name.");
+        List<Token> params = new ArrayList<>();
+        if (!check(RPAREN))
+            params = parameters();
+        consume(RPAREN, "Expect ')' after " + kind + " parameters.");
+
+        consume(LBRACE, "Expect '{' before " + kind + " body.");
+        List<Stmt> body = block();
+        return new FunStmt(name, params, body);
+    }
+
+    private List<Token> parameters() {
+        List<Token> params = new ArrayList<>();
+        do {
+            if (params.size() >= 255) {
+                error(peek(), "Can't have more than 255 parameters.");
+            }
+            params.add(consume(IDENTIFIER, "Expect parameter name."));
+        } while (match(COMMA));
+        return params;
     }
 
     private Stmt statement() {

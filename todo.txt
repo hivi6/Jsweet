@@ -1,8 +1,10 @@
 24.05.2022
 - [] Add Fuction support
-    - [] Native function support
-    - [] function calls
+    - [x] Native function support
+    - [x] function calls
+    - [x] function declaration
     - [] return Keyword support
+    - [] Anonymus Function support
 
 23.05.2022
 - [x] Add if statement

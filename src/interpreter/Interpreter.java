@@ -12,6 +12,7 @@ import ast.ContinueStmt;
 import ast.Expr;
 import ast.ExprStmt;
 import ast.ForStmt;
+import ast.FunStmt;
 import ast.GroupExpr;
 import ast.IfStmt;
 import ast.LiteralExpr;
@@ -24,6 +25,7 @@ import ast.VarExpr;
 import ast.VarStmt;
 import ast.WhileStmt;
 import callable.SwtCallable;
+import callable.SwtFunction;
 import runtime.BreakException;
 import runtime.ContinueException;
 import runtime.SweetRuntime;
@@ -36,7 +38,7 @@ import visitor.ExprVisitor;
 import visitor.StmtVisitor;
 
 public class Interpreter implements ExprVisitor<Object>, StmtVisitor<Void> {
-    final Environment globals = new Environment();
+    public final Environment globals = new Environment();
     private Environment environment = globals;
 
     public Interpreter() {
@@ -333,6 +335,13 @@ public class Interpreter implements ExprVisitor<Object>, StmtVisitor<Void> {
         throw new ContinueException();
     }
 
+    @Override
+    public Void visit(FunStmt stmt) {
+        SwtFunction function = new SwtFunction(stmt);
+        environment.define(stmt.name.lexeme, function);
+        return null;
+    }
+
     // **********
     // Helper Functions
     // **********
@@ -386,7 +395,7 @@ public class Interpreter implements ExprVisitor<Object>, StmtVisitor<Void> {
         stmt.accept(this);
     }
 
-    private void executeBlock(List<Stmt> stmts, Environment environment) {
+    public void executeBlock(List<Stmt> stmts, Environment environment) {
         Environment previous = this.environment;
         try {
             this.environment = environment;
