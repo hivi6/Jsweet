@@ -14,7 +14,7 @@
                          | continueStatement ;
     expressionStatement -> expression ;
     printStatement      -> "print" arguments* ";" ;
-    arguments           -> ternary ("," ternary)* ;
+    arguments           -> assignment ("," assignment)* ;
     block               -> "{" declaration* "}" ;
     ifStatement         -> "if" "(" expression ")" statement ("else" statement)? ;
     whileStatement      -> "while" "(" expression ")" statement ;
