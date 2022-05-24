@@ -34,7 +34,8 @@
     term                -> factor ( ( "-" | "+" ) factor )* ;
     factor              -> unary ( ( "/" | "*" ) unary )* ;
     unary               -> ( "!" | "-" ) unary
-                         | primary ;
+                         | call ;
+    call                -> primary ("(" arguments? ")")* ;
     primary             -> NUMBER | STRING | "true" | "false" | "nil"
                          | "(" expression ")" | IDENTIFIER ;
 */
@@ -48,6 +49,7 @@ import ast.AssignExpr;
 import ast.BinaryExpr;
 import ast.BlockStmt;
 import ast.BreakStmt;
+import ast.CallExpr;
 import ast.ContinueStmt;
 import ast.Expr;
 import ast.ExprStmt;
@@ -151,6 +153,9 @@ public class Parser {
         List<Expr> args = new ArrayList<>();
         args.add(assignment());
         while (match(COMMA)) {
+            if (args.size() >= 255) {
+                error(peek(), "Can't have more than 255 arguments.");
+            }
             args.add(assignment());
         }
         return args;
@@ -341,7 +346,22 @@ public class Parser {
             Expr right = unary();
             return new UnaryExpr(op, right);
         }
-        return primary();
+        return call();
+    }
+
+    private Expr call() {
+        Expr callee = primary();
+        while (true) {
+            if (match(LPAREN)) {
+                List<Expr> args = new ArrayList<>();
+                if (!check(RPAREN))
+                    args = arguments();
+                Token paren = consume(RPAREN, "Expect ')' after function arguments.");
+                callee = new CallExpr(callee, paren, args);
+            } else
+                break;
+        }
+        return callee;
     }
 
     private Expr primary() {

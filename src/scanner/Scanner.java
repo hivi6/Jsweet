@@ -220,7 +220,7 @@ public class Scanner {
         while (!isEnd() && Character.isDigit(peek()))
             advance();
         String lexeme = source.substring(startIndex, currIndex);
-        int literal = Integer.parseInt(lexeme);
+        long literal = Long.parseLong(lexeme);
         addToken(INT, literal);
     }
 

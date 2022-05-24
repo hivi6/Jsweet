@@ -101,6 +101,7 @@ public class GenerateAst {
                 "LogicalExpr     : Expr left, Token op, Expr right",
                 "TernaryExpr    : Expr cond, Expr trueExpr, Expr falseExpr",
                 "UnaryExpr      : Token op, Expr right",
+                "CallExpr       : Expr callee, Token paren, List<Expr> arguments",
                 "GroupExpr      : Expr expr",
                 "LiteralExpr    : Object val",
                 "VarExpr        : Token name"));

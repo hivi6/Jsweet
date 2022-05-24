@@ -8,6 +8,7 @@ public interface ExprVisitor<R> {
     R visit (LogicalExpr expr);
     R visit (TernaryExpr expr);
     R visit (UnaryExpr expr);
+    R visit (CallExpr expr);
     R visit (GroupExpr expr);
     R visit (LiteralExpr expr);
     R visit (VarExpr expr);

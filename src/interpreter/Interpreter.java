@@ -1,11 +1,13 @@
 package interpreter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import ast.AssignExpr;
 import ast.BinaryExpr;
 import ast.BlockStmt;
 import ast.BreakStmt;
+import ast.CallExpr;
 import ast.ContinueStmt;
 import ast.Expr;
 import ast.ExprStmt;
@@ -21,6 +23,7 @@ import ast.UnaryExpr;
 import ast.VarExpr;
 import ast.VarStmt;
 import ast.WhileStmt;
+import callable.SwtCallable;
 import runtime.BreakException;
 import runtime.ContinueException;
 import runtime.SweetRuntime;
@@ -33,7 +36,27 @@ import visitor.ExprVisitor;
 import visitor.StmtVisitor;
 
 public class Interpreter implements ExprVisitor<Object>, StmtVisitor<Void> {
-    private Environment environment = new Environment();
+    final Environment globals = new Environment();
+    private Environment environment = globals;
+
+    public Interpreter() {
+        globals.define("clock", new SwtCallable() {
+            @Override
+            public int arity() {
+                return 0;
+            }
+
+            @Override
+            public Object call(Interpreter interpreter, List<Object> arguments) {
+                return (long) System.currentTimeMillis();
+            }
+
+            @Override
+            public String toString() {
+                return "<native fn>";
+            }
+        });
+    }
 
     public void interpret(List<Stmt> statements) {
         try {
@@ -57,14 +80,14 @@ public class Interpreter implements ExprVisitor<Object>, StmtVisitor<Void> {
         switch (expr.op.type) {
             case SLASH:
                 if (isInt(left, right)) {
-                    if ((int) right == 0)
+                    if ((long) right == 0)
                         throw new SwtRuntimeError(expr.op, "Division by zero.");
-                    return (int) left / (int) right;
+                    return (long) left / (long) right;
                 }
                 throw unsupportedOperator(expr.op, 2);
             case STAR:
                 if (isInt(left, right))
-                    return (int) left * (int) right;
+                    return (long) left * (long) right;
                 if ((isInt(left) && isString(right)) || (isString(left) && isInt(right))) {
                     /*
                      * Example: "abc" * 3 == "abcabcabc"
@@ -73,7 +96,7 @@ public class Interpreter implements ExprVisitor<Object>, StmtVisitor<Void> {
                     // don't use the old left value or right
                     // value in res
                     SwtString res = new SwtString();
-                    int times = (isInt(left) ? (int) left : (int) right);
+                    long times = (isInt(left) ? (long) left : (long) right);
                     SwtString temp = new SwtString(isString(left) ? (SwtString) left : (SwtString) right);
                     if (times == 0 || temp.length() == 0)
                         return res;
@@ -87,10 +110,10 @@ public class Interpreter implements ExprVisitor<Object>, StmtVisitor<Void> {
             case MINUS:
                 if (!isInt(left, right))
                     throw new SwtRuntimeError(expr.op, "Operands must be int.");
-                return (int) left - (int) right;
+                return (long) left - (long) right;
             case PLUS:
                 if (isInt(left, right))
-                    return (int) left + (int) right;
+                    return (long) left + (long) right;
                 if (isString(left, right)) {
                     SwtString res = new SwtString((SwtString) left);
                     res.append((SwtString) right);
@@ -104,19 +127,19 @@ public class Interpreter implements ExprVisitor<Object>, StmtVisitor<Void> {
             // TODO: To add relational operation for String
             case LESS:
                 if (isInt(left, right))
-                    return (int) left < (int) right;
+                    return (long) left < (long) right;
                 throw unsupportedOperator(expr.op, 2);
             case LESS_EQUAL:
                 if (isInt(left, right))
-                    return (int) left <= (int) right;
+                    return (long) left <= (long) right;
                 throw unsupportedOperator(expr.op, 2);
             case GREATER:
                 if (isInt(left, right))
-                    return (int) left > (int) right;
+                    return (long) left > (long) right;
                 throw unsupportedOperator(expr.op, 2);
             case GREATER_EQUAL:
                 if (isInt(left, right))
-                    return (int) left >= (int) right;
+                    return (long) left >= (long) right;
                 throw unsupportedOperator(expr.op, 2);
             case BANG_EQUAL:
                 return !isEqual(left, right);
@@ -198,6 +221,26 @@ public class Interpreter implements ExprVisitor<Object>, StmtVisitor<Void> {
         Object value = evaluate(expr.value);
         environment.assign(expr.name, value);
         return value;
+    }
+
+    @Override
+    public Object visit(CallExpr expr) {
+        Object callee = evaluate(expr.callee);
+        List<Object> arguments = new ArrayList<>();
+        for (Expr arg : expr.arguments) {
+            arguments.add(evaluate(arg));
+        }
+
+        if (!(callee instanceof SwtCallable)) {
+            throw new SwtRuntimeError(expr.paren, "Can only call functions and classes");
+        }
+
+        SwtCallable function = (SwtCallable) callee;
+        if (arguments.size() != function.arity()) {
+            throw new SwtRuntimeError(expr.paren,
+                    "Expected " + function.arity() + " arguments but got " + arguments.size() + ".");
+        }
+        return function.call(this, arguments);
     }
 
     @Override
@@ -300,7 +343,7 @@ public class Interpreter implements ExprVisitor<Object>, StmtVisitor<Void> {
 
     private boolean isInt(Object... vals) {
         for (Object val : vals)
-            if (!(val instanceof Integer))
+            if (!(val instanceof Long))
                 return false;
         return true;
     }

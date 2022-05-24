@@ -1,3 +1,9 @@
+24.05.2022
+- [] Add Fuction support
+    - [] Native function support
+    - [] function calls
+    - [] return Keyword support
+
 23.05.2022
 - [x] Add if statement
 - [x] Add logical and, or
