@@ -5,6 +5,7 @@ import java.util.List;
 import ast.FunStmt;
 import interpreter.Environment;
 import interpreter.Interpreter;
+import runtime.ReturnException;
 
 public class SwtFunction implements SwtCallable {
 
@@ -20,8 +21,11 @@ public class SwtFunction implements SwtCallable {
         for (int i = 0; i < declaration.params.size(); i++) {
             environment.define(declaration.params.get(i).lexeme, arguments.get(i));
         }
-
-        interpreter.executeBlock(declaration.body, environment);
+        try {
+            interpreter.executeBlock(declaration.body, environment);
+        } catch (ReturnException e) {
+            return e.value;
+        }
         return null;
     }
 

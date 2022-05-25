@@ -116,6 +116,7 @@ public class GenerateAst {
                 "WhileStmt      : Expr cond, Stmt stmt",
                 "ForStmt        : Stmt initializer, Expr cond, Expr increment, Stmt body",
                 "BreakStmt      : ",
-                "ContinueStmt   : "));
+                "ContinueStmt   : ",
+                "ReturnStmt     : Token keyword, Expr value"));
     }
 }

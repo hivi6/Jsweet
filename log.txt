@@ -1,3 +1,9 @@
+25.05.2022
+Added support for return keyword.
+
+24.05.2022
+Added function declaration
+
 23.05.2022
 Added IF Statements and logical "and" and "or" operator
 Added WHILE Statements

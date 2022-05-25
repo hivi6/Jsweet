@@ -1,3 +1,6 @@
+25.05.2022
+- [x] Return keyword support
+
 24.05.2022
 - [] Add Fuction support
     - [x] Native function support

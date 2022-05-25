@@ -18,6 +18,7 @@ import ast.IfStmt;
 import ast.LiteralExpr;
 import ast.LogicalExpr;
 import ast.PrintStmt;
+import ast.ReturnStmt;
 import ast.Stmt;
 import ast.TernaryExpr;
 import ast.UnaryExpr;
@@ -28,6 +29,7 @@ import callable.SwtCallable;
 import callable.SwtFunction;
 import runtime.BreakException;
 import runtime.ContinueException;
+import runtime.ReturnException;
 import runtime.SweetRuntime;
 import runtime.SwtRuntimeError;
 import token.Token;
@@ -340,6 +342,14 @@ public class Interpreter implements ExprVisitor<Object>, StmtVisitor<Void> {
         SwtFunction function = new SwtFunction(stmt);
         environment.define(stmt.name.lexeme, function);
         return null;
+    }
+
+    @Override
+    public Void visit(ReturnStmt stmt) {
+        Object value = null;
+        if (stmt.value != null)
+            value = evaluate(stmt.value);
+        throw new ReturnException(value);
     }
 
     // **********

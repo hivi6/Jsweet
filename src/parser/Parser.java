@@ -15,7 +15,8 @@
                          | whileStatement
                          | forStatement
                          | breakStatement
-                         | continueStatement ;
+                         | continueStatement 
+                         | returnStatement ;
     expressionStatement -> expression ;
     printStatement      -> "print" arguments* ";" ;
     arguments           -> assignment ("," assignment)* ;
@@ -24,8 +25,9 @@
     whileStatement      -> "while" "(" expression ")" statement ;
     forStatement        -> "for" "(" (varDeclaration | expressionStatement | ";") expression? ";" expression? ")"
                            statement ;
-    breakStatement      -> "break" ;
-    continueStatement   -> "continue" ;
+    breakStatement      -> "break" ";" ;
+    continueStatement   -> "continue" ";" ;
+    returnStatement     -> "return" expression ";" ;
     expression          -> comma ;
     comma               -> assignment ("," assignment)* ;
     assignment          -> IDENTIFIER "=" assignment
@@ -64,6 +66,7 @@ import ast.IfStmt;
 import ast.LiteralExpr;
 import ast.LogicalExpr;
 import ast.PrintStmt;
+import ast.ReturnStmt;
 import ast.Stmt;
 import ast.TernaryExpr;
 import ast.UnaryExpr;
@@ -164,6 +167,8 @@ public class Parser {
             return breakStatement();
         if (match(CONTINUE))
             return continueStatement();
+        if (match(RETURN))
+            return returnStatement();
         return expressionStatement();
     }
 
@@ -271,6 +276,15 @@ public class Parser {
         }
         consume(SEMICOLON, "Expect ';' after continue keyword.");
         return new ContinueStmt();
+    }
+
+    private Stmt returnStatement() {
+        Token keyword = previous();
+        Expr value = null;
+        if (!check(SEMICOLON))
+            value = expression();
+        consume(SEMICOLON, "Expect ';' after return keyword");
+        return new ReturnStmt(keyword, value);
     }
 
     private Expr expression() {
