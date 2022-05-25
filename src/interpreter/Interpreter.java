@@ -339,7 +339,7 @@ public class Interpreter implements ExprVisitor<Object>, StmtVisitor<Void> {
 
     @Override
     public Void visit(FunStmt stmt) {
-        SwtFunction function = new SwtFunction(stmt);
+        SwtFunction function = new SwtFunction(stmt, environment);
         environment.define(stmt.name.lexeme, function);
         return null;
     }
