@@ -1,10 +1,12 @@
+fun fib(n) {
+    if (n <= 1)
+        return n;
+    return fib(n - 1) + fib(n - 2);
+}
+
 // main
 {
-    var n = 10, a = 1, b = 0;
-    for (var i = 0; i < n; i = i + 1) {
-        var temp = a + b;
-        b = a;
-        a = temp;
+    for (var i = 0; i < 100; i = i + 1) {
+        print "fib(" + i + "): " + fib(i); 
     }
-    print "fib(" + n + "):", a;
 }
