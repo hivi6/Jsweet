@@ -6,7 +6,8 @@
                          | statement ;
     varDeclaration      -> "var" IDENTIFIER ("=" assignment)? ("," IDENTIFIER ("=" assignment))* ";" ;
     functionDeclaration -> "fun" function ;
-    function            -> IDENTIFIER "(" parameters? ")" block ;
+    function            -> IDENTIFIER functionBody ;
+    functionBody        -> "(" parameters? ")" (block | ("=>" assignment)) ;
     parameters          -> IDENTIFIER ("," IDENTIFIER)* ;
     statement           -> expressionStatement
                          | printStatement
@@ -43,7 +44,8 @@
                          | call ;
     call                -> primary ("(" arguments? ")")* ;
     primary             -> NUMBER | STRING | "true" | "false" | "nil"
-                         | "(" expression ")" | IDENTIFIER ;
+                         | "(" expression ")" | IDENTIFIER | functionExpr ;
+    functionExpr        -> "fun" functionBody ;
 */
 
 package parser;
@@ -143,8 +145,16 @@ public class Parser {
             params = parameters();
         consume(RPAREN, "Expect ')' after " + kind + " parameters.");
 
-        consume(LBRACE, "Expect '{' before " + kind + " body.");
-        List<Stmt> body = block();
+        // For lambda expression
+        List<Stmt> body = new ArrayList<>();
+        if (match(ARROW)) {
+            Expr expr = assignment();
+            Stmt returnStmt = new ReturnStmt(expr);
+            body.add(returnStmt);
+        } else {
+            consume(LBRACE, "Expect '{' before " + kind + " body.");
+            body = block();
+        }
         return new FunExpr(params, body);
     }
 
@@ -286,12 +296,12 @@ public class Parser {
     }
 
     private Stmt returnStatement() {
-        Token keyword = previous();
+        // Token keyword = previous();
         Expr value = null;
         if (!check(SEMICOLON))
             value = expression();
         consume(SEMICOLON, "Expect ';' after return keyword");
-        return new ReturnStmt(keyword, value);
+        return new ReturnStmt(value);
     }
 
     private Expr expression() {

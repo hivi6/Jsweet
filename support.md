@@ -55,6 +55,7 @@
     1. [x] Conditional expression
     1. [x] Assignment
     1. [x] Functional expression
+        - [] lamda expression format
     1. [x] Conditional operators like and, or
 1. [] Evaluate Statement
     1. [x] Expression Statement

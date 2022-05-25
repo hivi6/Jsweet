@@ -110,7 +110,7 @@ public class Scanner {
                 addToken(COLON);
                 break;
             case '=':
-                addToken(match('=') ? EQUAL_EQUAL : EQUAL);
+                addToken(match('=') ? EQUAL_EQUAL : (match('>') ? ARROW : EQUAL));
                 break;
             case '!':
                 addToken(match('=') ? BANG_EQUAL : BANG);

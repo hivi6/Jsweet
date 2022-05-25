@@ -7,6 +7,8 @@ public enum TokenType {
     SEMICOLON, COMMA, DOT, // ; , .
     QMARK, COLON, // ? :
 
+    ARROW,  // =>
+
     // Arithmetic
     PLUS, // +
     MINUS, // -

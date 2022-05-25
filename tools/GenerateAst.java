@@ -118,6 +118,6 @@ public class GenerateAst {
                 "ForStmt        : Stmt initializer, Expr cond, Expr increment, Stmt body",
                 "BreakStmt      : ",
                 "ContinueStmt   : ",
-                "ReturnStmt     : Token keyword, Expr value"));
+                "ReturnStmt     : Expr value"));
     }
 }

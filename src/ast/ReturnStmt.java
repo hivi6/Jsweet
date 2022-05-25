@@ -7,8 +7,7 @@ import token.Token;
 import visitor.StmtVisitor;
 
 public class ReturnStmt extends Stmt {
-    public ReturnStmt(Token keyword, Expr value) {
-        this.keyword = keyword;
+    public ReturnStmt(Expr value) {
         this.value = value;
     }
 
@@ -17,6 +16,5 @@ public class ReturnStmt extends Stmt {
         return visitor.visit(this);
     }
 
-    public final Token keyword;
     public final Expr value;
 }
