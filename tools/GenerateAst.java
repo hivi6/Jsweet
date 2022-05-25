@@ -104,13 +104,14 @@ public class GenerateAst {
                 "CallExpr       : Expr callee, Token paren, List<Expr> arguments",
                 "GroupExpr      : Expr expr",
                 "LiteralExpr    : Object val",
-                "VarExpr        : Token name"));
+                "VarExpr        : Token name",
+                "FunExpr        : List<Token> params, List<Stmt> body"));
 
         defineAst(srcPath, "Stmt", Arrays.asList(
                 "ExprStmt       : Expr expr",
                 "PrintStmt      : List<Expr> arguments",
                 "VarStmt        : List<Pair<Token|Expr>> vars", // here ',' is a first separator, so using '|'
-                "FunStmt        : Token name, List<Token> params, List<Stmt> body",
+                "FunStmt        : Token name, Expr function",
                 "BlockStmt      : List<Stmt> statements",
                 "IfStmt         : Expr cond, Stmt thenStmt, Stmt elseStmt",
                 "WhileStmt      : Expr cond, Stmt stmt",

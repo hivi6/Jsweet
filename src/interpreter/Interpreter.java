@@ -12,6 +12,7 @@ import ast.ContinueStmt;
 import ast.Expr;
 import ast.ExprStmt;
 import ast.ForStmt;
+import ast.FunExpr;
 import ast.FunStmt;
 import ast.GroupExpr;
 import ast.IfStmt;
@@ -248,6 +249,11 @@ public class Interpreter implements ExprVisitor<Object>, StmtVisitor<Void> {
     }
 
     @Override
+    public Object visit(FunExpr expr) {
+        return new SwtFunction(null, expr, environment);
+    }
+
+    @Override
     public Void visit(ExprStmt stmt) {
         evaluate(stmt.expr);
         return null;
@@ -339,7 +345,7 @@ public class Interpreter implements ExprVisitor<Object>, StmtVisitor<Void> {
 
     @Override
     public Void visit(FunStmt stmt) {
-        SwtFunction function = new SwtFunction(stmt, environment);
+        SwtFunction function = new SwtFunction(stmt.name.lexeme, (FunExpr) stmt.function, environment);
         environment.define(stmt.name.lexeme, function);
         return null;
     }

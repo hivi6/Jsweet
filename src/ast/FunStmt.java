@@ -7,10 +7,9 @@ import token.Token;
 import visitor.StmtVisitor;
 
 public class FunStmt extends Stmt {
-    public FunStmt(Token name, List<Token> params, List<Stmt> body) {
+    public FunStmt(Token name, Expr function) {
         this.name = name;
-        this.params = params;
-        this.body = body;
+        this.function = function;
     }
 
     @Override
@@ -19,6 +18,5 @@ public class FunStmt extends Stmt {
     }
 
     public final Token name;
-    public final List<Token> params;
-    public final List<Stmt> body;
+    public final Expr function;
 }

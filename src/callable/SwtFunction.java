@@ -2,17 +2,18 @@ package callable;
 
 import java.util.List;
 
-import ast.FunStmt;
+import ast.FunExpr;
 import interpreter.Environment;
 import interpreter.Interpreter;
 import runtime.ReturnException;
 
 public class SwtFunction implements SwtCallable {
-
-    private final FunStmt declaration;
+    private final String name;
+    private final FunExpr declaration;
     private final Environment closure;
 
-    public SwtFunction(FunStmt declaration, Environment closure) {
+    public SwtFunction(String name, FunExpr declaration, Environment closure) {
+        this.name = name;
         this.declaration = declaration;
         this.closure = closure;
     }
@@ -38,6 +39,8 @@ public class SwtFunction implements SwtCallable {
 
     @Override
     public String toString() {
-        return "<fn " + declaration.name.lexeme + ">";
+        if (name == null)
+            return "<anonymous fn>";
+        return "<fn " + name + ">";
     }
 }

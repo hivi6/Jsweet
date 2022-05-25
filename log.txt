@@ -1,5 +1,6 @@
 25.05.2022
 Added support for return keyword.
+Added support for anonymous function
 
 24.05.2022
 Added function declaration

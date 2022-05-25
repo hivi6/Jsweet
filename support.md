@@ -50,11 +50,11 @@
 1. [x] Evaluate Expression
     1. [x] Arithmetic expression
     1. [x] Relational expression
-    1. [] Logical expression
+    1. [x] Logical expression
     1. [x] Comma expression
     1. [x] Conditional expression
     1. [x] Assignment
-    1. [] Functional expression
+    1. [x] Functional expression
     1. [x] Conditional operators like and, or
 1. [] Evaluate Statement
     1. [x] Expression Statement

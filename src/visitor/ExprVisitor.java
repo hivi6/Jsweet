@@ -12,4 +12,5 @@ public interface ExprVisitor<R> {
     R visit (GroupExpr expr);
     R visit (LiteralExpr expr);
     R visit (VarExpr expr);
+    R visit (FunExpr expr);
 }

@@ -60,6 +60,7 @@ import ast.ContinueStmt;
 import ast.Expr;
 import ast.ExprStmt;
 import ast.ForStmt;
+import ast.FunExpr;
 import ast.FunStmt;
 import ast.GroupExpr;
 import ast.IfStmt;
@@ -105,8 +106,10 @@ public class Parser {
         try {
             if (match(VAR))
                 return varDeclaration();
-            if (match(FUN))
+            if (check(FUN) && checkNext(IDENTIFIER)) {
+                consume(FUN, null);
                 return function("function");
+            }
             return statement();
         } catch (ParseError e) {
             synchronize();
@@ -130,6 +133,10 @@ public class Parser {
     private Stmt function(String kind) {
         Token name = consume(IDENTIFIER, "Expect " + kind + " name.");
 
+        return new FunStmt(name, functionBody(kind));
+    }
+
+    private Expr functionBody(String kind) {
         consume(LPAREN, "Expect '(' after " + kind + " name.");
         List<Token> params = new ArrayList<>();
         if (!check(RPAREN))
@@ -138,7 +145,7 @@ public class Parser {
 
         consume(LBRACE, "Expect '{' before " + kind + " body.");
         List<Stmt> body = block();
-        return new FunStmt(name, params, body);
+        return new FunExpr(params, body);
     }
 
     private List<Token> parameters() {
@@ -426,6 +433,8 @@ public class Parser {
         }
         if (match(IDENTIFIER))
             return new VarExpr(previous());
+        if (match(FUN))
+            return functionBody("function");
         throw error(peek(), "Expect expression.");
     }
 
@@ -447,6 +456,14 @@ public class Parser {
         if (isEnd())
             return false;
         return peek().type == type;
+    }
+
+    private boolean checkNext(TokenType tokenType) {
+        if (isEnd())
+            return false;
+        if (tokens.get(current + 1).type == EOF)
+            return false;
+        return tokens.get(current + 1).type == tokenType;
     }
 
     private boolean isEnd() {

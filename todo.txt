@@ -1,5 +1,6 @@
 25.05.2022
 - [x] Return keyword support
+- [x] Anonymus Function support
 
 24.05.2022
 - [] Add Fuction support
