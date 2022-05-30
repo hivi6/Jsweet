@@ -55,7 +55,7 @@
     1. [x] Conditional expression
     1. [x] Assignment
     1. [x] Functional expression
-        - [] lamda expression format
+        - [x] lamda expression format
     1. [x] Conditional operators like and, or
 1. [] Evaluate Statement
     1. [x] Expression Statement
@@ -64,9 +64,9 @@
     1. [x] Multiple Variable declaration at once.
     1. [x] Block Support
     1. [x] if-else statment support
-    1. [] Loop Support
+    1. [x] Loop Support
         - [x] While Loop
         - [x] For Loop
         - [x] do while loop
-        - [] repeat loop
+        - [x] repeat loop
     1. [x] Break and continue support

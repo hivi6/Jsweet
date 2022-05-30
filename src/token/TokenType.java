@@ -29,7 +29,7 @@ public enum TokenType {
     PRINT, // For debuging
     VAR, // Variable Declaration
     IF, ELSE, // Conditional
-    DO, FOR, WHILE, BREAK, CONTINUE, // loops
+    DO, FOR, WHILE, REPEAT, BREAK, CONTINUE, // loops
     FUN, RETURN, // Functions
     CLASS, SUPER, THIS, // Class
 

@@ -16,6 +16,7 @@
                          | whileStatement
                          | forStatement
                          | doWhileStatement
+                         | repeatStatement
                          | breakStatement
                          | continueStatement 
                          | returnStatement ;
@@ -28,6 +29,7 @@
     forStatement        -> "for" "(" (varDeclaration | expressionStatement | ";") expression? ";" expression? ")"
                            statement ;
     doWhileStatement    -> "do" statement "while" "(" expression ")" ";" ;
+    repeatStatement     -> "repeat" "(" expression ")" statement ;
     breakStatement      -> "break" ";" ;
     continueStatement   -> "continue" ";" ;
     returnStatement     -> "return" expression ";" ;
@@ -72,6 +74,7 @@ import ast.IfStmt;
 import ast.LiteralExpr;
 import ast.LogicalExpr;
 import ast.PrintStmt;
+import ast.RepeatStmt;
 import ast.ReturnStmt;
 import ast.Stmt;
 import ast.TernaryExpr;
@@ -185,6 +188,8 @@ public class Parser {
             return forStatement();
         if (match(DO))
             return doWhileStatement();
+        if (match(REPEAT))
+            return repeatStatement();
         if (match(BREAK))
             return breakStatement();
         if (match(CONTINUE))
@@ -294,6 +299,19 @@ public class Parser {
             consume(RPAREN, "Expect ')' after while condition.");
             consume(SEMICOLON, "Expect ';' after do while clause.");
             return new DoWhileStmt(body, cond);
+        } finally {
+            loopDepth--;
+        }
+    }
+
+    private Stmt repeatStatement() {
+        try {
+            loopDepth++;
+            Token paren = consume(LPAREN, "Expect '(' after repeat keyword.");
+            Expr upto = expression();
+            consume(RPAREN, "Expect ')' after repeat length.");
+            Stmt body = statement();
+            return new RepeatStmt(paren, upto, body);
         } finally {
             loopDepth--;
         }

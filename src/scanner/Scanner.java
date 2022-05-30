@@ -34,6 +34,7 @@ public class Scanner {
         keywords.put("do", DO);
         keywords.put("for", FOR);
         keywords.put("while", WHILE);
+        keywords.put("repeat", REPEAT);
         keywords.put("fun", FUN);
         keywords.put("return", RETURN);
         keywords.put("class", CLASS);

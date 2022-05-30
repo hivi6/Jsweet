@@ -20,6 +20,7 @@ import ast.IfStmt;
 import ast.LiteralExpr;
 import ast.LogicalExpr;
 import ast.PrintStmt;
+import ast.RepeatStmt;
 import ast.ReturnStmt;
 import ast.Stmt;
 import ast.TernaryExpr;
@@ -344,6 +345,23 @@ public class Interpreter implements ExprVisitor<Object>, StmtVisitor<Void> {
             } catch (ContinueException e) {
             }
         } while (isTrue(evaluate(stmt.cond)));
+        return null;
+    }
+
+    @Override
+    public Void visit(RepeatStmt stmt) {
+        Object upto = evaluate(stmt.upto);
+        if (!isInt(upto))
+            throw new SwtRuntimeError(stmt.paren, "Expected a int value.");
+        long len = (long) upto;
+        for (long i = 0; i < len; i++) {
+            try {
+                execute(stmt.body);
+            } catch (BreakException e) {
+                break;
+            } catch (ContinueException e) {
+            }
+        }
         return null;
     }
 
