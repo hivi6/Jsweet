@@ -116,6 +116,7 @@ public class GenerateAst {
                 "IfStmt         : Expr cond, Stmt thenStmt, Stmt elseStmt",
                 "WhileStmt      : Expr cond, Stmt stmt",
                 "ForStmt        : Stmt initializer, Expr cond, Expr increment, Stmt body",
+                "DoWhileStmt    : Stmt body, Expr cond",
                 "BreakStmt      : ",
                 "ContinueStmt   : ",
                 "ReturnStmt     : Expr value"));

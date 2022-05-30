@@ -15,6 +15,7 @@
                          | ifStatement
                          | whileStatement
                          | forStatement
+                         | doWhileStatement
                          | breakStatement
                          | continueStatement 
                          | returnStatement ;
@@ -26,6 +27,7 @@
     whileStatement      -> "while" "(" expression ")" statement ;
     forStatement        -> "for" "(" (varDeclaration | expressionStatement | ";") expression? ";" expression? ")"
                            statement ;
+    doWhileStatement    -> "do" statement "while" "(" expression ")" ";" ;
     breakStatement      -> "break" ";" ;
     continueStatement   -> "continue" ";" ;
     returnStatement     -> "return" expression ";" ;
@@ -59,6 +61,7 @@ import ast.BlockStmt;
 import ast.BreakStmt;
 import ast.CallExpr;
 import ast.ContinueStmt;
+import ast.DoWhileStmt;
 import ast.Expr;
 import ast.ExprStmt;
 import ast.ForStmt;
@@ -180,6 +183,8 @@ public class Parser {
             return whileStatement();
         if (match(FOR))
             return forStatement();
+        if (match(DO))
+            return doWhileStatement();
         if (match(BREAK))
             return breakStatement();
         if (match(CONTINUE))
@@ -274,6 +279,21 @@ public class Parser {
             Stmt body = statement();
 
             return new ForStmt(initializer, cond, increment, body);
+        } finally {
+            loopDepth--;
+        }
+    }
+
+    private Stmt doWhileStatement() {
+        try {
+            loopDepth++;
+            Stmt body = statement();
+            consume(WHILE, "Expect while after do body.");
+            consume(LPAREN, "Expect '(' after while keyword.");
+            Expr cond = expression();
+            consume(RPAREN, "Expect ')' after while condition.");
+            consume(SEMICOLON, "Expect ';' after do while clause.");
+            return new DoWhileStmt(body, cond);
         } finally {
             loopDepth--;
         }

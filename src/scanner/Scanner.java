@@ -31,6 +31,7 @@ public class Scanner {
         keywords.put("var", VAR);
         keywords.put("if", IF);
         keywords.put("else", ELSE);
+        keywords.put("do", DO);
         keywords.put("for", FOR);
         keywords.put("while", WHILE);
         keywords.put("fun", FUN);

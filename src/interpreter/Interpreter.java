@@ -9,6 +9,7 @@ import ast.BlockStmt;
 import ast.BreakStmt;
 import ast.CallExpr;
 import ast.ContinueStmt;
+import ast.DoWhileStmt;
 import ast.Expr;
 import ast.ExprStmt;
 import ast.ForStmt;
@@ -196,7 +197,7 @@ public class Interpreter implements ExprVisitor<Object>, StmtVisitor<Void> {
         switch (expr.op.type) {
             case MINUS: // only available with numeric types
                 if (isInt(right))
-                    return -(int) right;
+                    return -(long) right;
                 throw unsupportedOperator(expr.op, 1);
             case BANG:
                 return !isTrue(right);
@@ -330,6 +331,19 @@ public class Interpreter implements ExprVisitor<Object>, StmtVisitor<Void> {
         } finally {
             this.environment = previous;
         }
+        return null;
+    }
+
+    @Override
+    public Void visit(DoWhileStmt stmt) {
+        do {
+            try {
+                execute(stmt.body);
+            } catch (BreakException e) {
+                break;
+            } catch (ContinueException e) {
+            }
+        } while (isTrue(evaluate(stmt.cond)));
         return null;
     }
 

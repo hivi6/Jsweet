@@ -1,3 +1,6 @@
+30.05.2022
+Added support for do while loop
+
 25.05.2022
 Added support for return keyword.
 Added support for anonymous function

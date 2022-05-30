@@ -67,6 +67,6 @@
     1. [] Loop Support
         - [x] While Loop
         - [x] For Loop
-        - [] do while loop
+        - [x] do while loop
         - [] repeat loop
     1. [x] Break and continue support
