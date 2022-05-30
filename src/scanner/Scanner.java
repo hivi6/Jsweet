@@ -124,13 +124,13 @@ public class Scanner {
                 addToken(match('=') ? GREATER_EQUAL : GREATER);
                 break;
             case '+':
-                addToken(match('+') ? PLUS_PLUS : PLUS);
+                addToken(match('+') ? PLUS_PLUS : (match('=') ? PLUS_EQUAL : PLUS));
                 break;
             case '-':
-                addToken(match('-') ? MINUS_MINUS : MINUS);
+                addToken(match('-') ? MINUS_MINUS : (match('=') ? MINUS_EQUAL : MINUS));
                 break;
             case '*':
-                addToken(STAR);
+                addToken(match('=') ? STAR_EQUAL : STAR);
                 break;
             case '/': {
                 if (match('/')) { // '/'
@@ -152,7 +152,7 @@ public class Scanner {
                         advance(); // /
                     }
                 } else
-                    addToken(SLASH);
+                    addToken(match('=') ? SLASH_EQUAL : SLASH);
                 break;
             }
             case '"':

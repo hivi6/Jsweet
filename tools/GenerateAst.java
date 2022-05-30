@@ -96,7 +96,7 @@ public class GenerateAst {
     public static void main(String args[]) throws IOException {
         String srcPath = "D:/Development/project/jsweet/src";
         defineAst(srcPath, "Expr", Arrays.asList(
-                "AssignExpr     : Token name, Expr value",
+                "AssignExpr     : Token name, Token equals, Expr value",
                 "BinaryExpr     : Expr left, Token op, Expr right",
                 "LogicalExpr     : Expr left, Token op, Expr right",
                 "TernaryExpr    : Expr cond, Expr trueExpr, Expr falseExpr",

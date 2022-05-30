@@ -10,10 +10,10 @@ public enum TokenType {
     ARROW,  // =>
 
     // Arithmetic
-    PLUS, PLUS_PLUS, // + ++
-    MINUS, MINUS_MINUS, // - --
-    STAR, // *
-    SLASH, // /
+    PLUS, PLUS_PLUS, PLUS_EQUAL, // + ++ +=
+    MINUS, MINUS_MINUS, MINUS_EQUAL, // - -- -=
+    STAR, STAR_EQUAL, // * *=
+    SLASH, SLASH_EQUAL, // / /=
     // Relational
     EQUAL, EQUAL_EQUAL, // = ==
     BANG, BANG_EQUAL, // ! !=

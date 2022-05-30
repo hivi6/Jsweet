@@ -2,6 +2,7 @@
 Added support for do while loop
 Added support for repeat loop
 Added support for ++ and -- prefix operator
+Add support for more assignment operators(+=, -=, *=, /=)
 
 25.05.2022
 Added support for return keyword.

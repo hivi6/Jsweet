@@ -35,7 +35,7 @@
     returnStatement     -> "return" expression ";" ;
     expression          -> comma ;
     comma               -> assignment ("," assignment)* ;
-    assignment          -> IDENTIFIER "=" assignment
+    assignment          -> IDENTIFIER ("=" | "+=" | "-=" | "*=" | "/=") assignment
                          | ternary ;
     ternary             -> logicalOr ("?" expression ":" ternary)? ;
     logicalOr           -> logicalAnd ( "or" logicalAnd )* ;
@@ -358,12 +358,12 @@ public class Parser {
 
     private Expr assignment() {
         Expr expr = ternary();
-        if (match(EQUAL)) {
+        if (match(EQUAL, PLUS_EQUAL, MINUS_EQUAL, STAR_EQUAL, SLASH_EQUAL)) {
             Token equals = previous();
             Expr value = assignment();
             if (expr instanceof VarExpr) {
                 Token name = ((VarExpr) expr).name;
-                return new AssignExpr(name, value);
+                return new AssignExpr(name, equals, value);
             }
             error(equals, "Invalid assignment target");
         }

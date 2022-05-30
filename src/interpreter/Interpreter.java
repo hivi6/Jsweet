@@ -86,51 +86,13 @@ public class Interpreter implements ExprVisitor<Object>, StmtVisitor<Void> {
 
         switch (expr.op.type) {
             case SLASH:
-                if (isInt(left, right)) {
-                    if ((long) right == 0)
-                        throw new SwtRuntimeError(expr.op, "Division by zero.");
-                    return (long) left / (long) right;
-                }
-                throw unsupportedOperator(expr.op, 2);
+                return divideOperation(left, expr.op, right);
             case STAR:
-                if (isInt(left, right))
-                    return (long) left * (long) right;
-                if ((isInt(left) && isString(right)) || (isString(left) && isInt(right))) {
-                    /*
-                     * Example: "abc" * 3 == "abcabcabc"
-                     */
-                    // create a new instance
-                    // don't use the old left value or right
-                    // value in res
-                    SwtString res = new SwtString();
-                    long times = (isInt(left) ? (long) left : (long) right);
-                    SwtString temp = new SwtString(isString(left) ? (SwtString) left : (SwtString) right);
-                    if (times == 0 || temp.length() == 0)
-                        return res;
-                    if (times < 0)
-                        throw new SwtRuntimeError(expr.op, "Cannot be a negative number.");
-                    for (int i = 0; i < times; i++)
-                        res.append(temp);
-                    return res;
-                }
-                throw unsupportedOperator(expr.op, 2);
+                return multiplyOperation(left, expr.op, right);
             case MINUS:
-                if (!isInt(left, right))
-                    throw new SwtRuntimeError(expr.op, "Operands must be int.");
-                return (long) left - (long) right;
+                return minusOperation(left, expr.op, right);
             case PLUS:
-                if (isInt(left, right))
-                    return (long) left + (long) right;
-                if (isString(left, right)) {
-                    SwtString res = new SwtString((SwtString) left);
-                    res.append((SwtString) right);
-                    return res;
-                }
-                if ((isInt(left) && isString(right)) || (isString(left) && isInt(right))) {
-                    // "123" + 45 = "12345"
-                    return new SwtString(left.toString() + right.toString());
-                }
-                throw unsupportedOperator(expr.op, 2);
+                return addOperation(left, expr.op, right);
             // TODO: To add relational operation for String
             case LESS:
                 if (isInt(left, right))
@@ -235,8 +197,27 @@ public class Interpreter implements ExprVisitor<Object>, StmtVisitor<Void> {
     @Override
     public Object visit(AssignExpr expr) {
         Object value = evaluate(expr.value);
+        Object varValue = environment.get(expr.name);
+        switch (expr.equals.type) {
+            case EQUAL: // no need for any modification to value
+                break;
+            case PLUS_EQUAL:
+                value = addOperation(varValue, expr.equals, value);
+                break;
+            case MINUS_EQUAL:
+                value = minusOperation(varValue, expr.equals, value);
+                break;
+            case STAR_EQUAL:
+                value = multiplyOperation(varValue, expr.equals, value);
+                break;
+            case SLASH_EQUAL:
+                value = divideOperation(varValue, expr.equals, value);
+                break;
+            default:
+                break;
+        }
         environment.assign(expr.name, value);
-        return value;
+        return value; // Unreachable
     }
 
     @Override
@@ -461,5 +442,59 @@ public class Interpreter implements ExprVisitor<Object>, StmtVisitor<Void> {
         } finally {
             this.environment = previous;
         }
+    }
+
+    private Object divideOperation(Object left, Token op, Object right) {
+        if (isInt(left, right)) {
+            if ((long) right == 0)
+                throw new SwtRuntimeError(op, "Division by zero.");
+            return (long) left / (long) right;
+        }
+        throw unsupportedOperator(op, 2);
+    }
+
+    private Object multiplyOperation(Object left, Token op, Object right) {
+        if (isInt(left, right))
+            return (long) left * (long) right;
+        if ((isInt(left) && isString(right)) || (isString(left) && isInt(right))) {
+            /*
+             * Example: "abc" * 3 == "abcabcabc"
+             */
+            // create a new instance
+            // don't use the old left value or right
+            // value in res
+            SwtString res = new SwtString();
+            long times = (isInt(left) ? (long) left : (long) right);
+            SwtString temp = new SwtString(isString(left) ? (SwtString) left : (SwtString) right);
+            if (times == 0 || temp.length() == 0)
+                return res;
+            if (times < 0)
+                throw new SwtRuntimeError(op, "Cannot be a negative number.");
+            for (int i = 0; i < times; i++)
+                res.append(temp);
+            return res;
+        }
+        throw unsupportedOperator(op, 2);
+    }
+
+    private Object minusOperation(Object left, Token op, Object right) {
+        if (!isInt(left, right))
+            throw new SwtRuntimeError(op, "Operands must be int.");
+        return (long) left - (long) right;
+    }
+
+    private Object addOperation(Object left, Token op, Object right) {
+        if (isInt(left, right))
+            return (long) left + (long) right;
+        if (isString(left, right)) {
+            SwtString res = new SwtString((SwtString) left);
+            res.append((SwtString) right);
+            return res;
+        }
+        if ((isInt(left) && isString(right)) || (isString(left) && isInt(right))) {
+            // "123" + 45 = "12345"
+            return new SwtString(left.toString() + right.toString());
+        }
+        throw unsupportedOperator(op, 2);
     }
 }

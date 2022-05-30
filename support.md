@@ -54,9 +54,10 @@
     1. [x] Comma expression
     1. [x] Conditional expression
     1. [x] Assignment
-    1. [] Other assignment operators
+    1. [x] Other assignment operators
     1. [] More postfix and prefix operation
         - [x] Prefix ++/--
+        - [] postfix ++/--
     1. [x] Functional expression
         - [x] lamda expression format
     1. [x] Conditional operators like and, or

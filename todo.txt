@@ -2,6 +2,7 @@
 - [x] Add support for do while loops
 - [x] Add support for repeat loops
 - [x] Add ++ and -- prefix operators
+- [x] Add support for more assignment operators(+=, -=, *=, /=)
 
 25.05.2022
 - [x] Return keyword support
