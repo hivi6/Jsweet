@@ -1,22 +1,32 @@
-// TC: O(n)
-fun fact(n) => n <= 0 ? 1 : n * fact(n - 1);
-
 // TC: O(2^n)
 fun fib(n) => n <= 1 ? n : fib(n - 1) + fib(n - 2);
 
 // TC: O(n)
-fun sum(n) => n <= 0 ? 0 : n + sum(n - 1);
-
 fun sumFn(n, fn) {
     var res = 0;
-    for (var i = 1; i <= n; i++) {
+    for (var i = 0; i < n; ++i) {
         res += fn(i);
     }
     return res;
 }
 
 // TC: O(n)
-fun pow(x, y) => y == 0 ? 1 : x * pow(x, y - 1);
+fun productFn(n, fn) {
+    var res = 1;
+    for (var i = 0; i < n; ++i) {
+        res *= fn(i);
+    }
+    return res;
+}
+
+// TC: O(n)
+fun sum(n) => sumFn(n, fun (i) => i + 1);
+
+// TC: O(n)
+fun fact(n) => (n <= 0 ? 1 : productFn(n, fun(i) => i));
+
+// TC: O(n)
+fun pow(x, y) => (y <= 0 ? 1 : productFn(y, fun(i) => x));
 
 // TC: O(lg(n))
 fun fastpow(x, y) => (y == 0 ? 1 : (y % 2 == 0 ? fastpow(x * x, y / 2) : fastpow(x, y - 1) * x));

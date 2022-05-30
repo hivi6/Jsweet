@@ -3,6 +3,7 @@
 - [x] Add support for repeat loops
 - [x] Add ++ and -- prefix operators
 - [x] Add support for more assignment operators(+=, -=, *=, /=)
+- [x] Add support for modulus operator(%, %=) 
 
 25.05.2022
 - [x] Return keyword support

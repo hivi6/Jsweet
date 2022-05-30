@@ -3,6 +3,15 @@ Added support for do while loop
 Added support for repeat loop
 Added support for ++ and -- prefix operator
 Add support for more assignment operators(+=, -=, *=, /=)
+Fixed a bug related to lambda expression parsing (
+    if i write,
+        fun sq(n) => n * n;
+    here, the semi-colon was not consumed for a function declaration. For a lambda expression
+    like,
+        var sq = fun(n) => n * n; 
+    here there is no required for consuming for semi-colon, but for function declaration that is a requirement.
+)
+Added support for modulus operator(%, %=)
 
 25.05.2022
 Added support for return keyword.
