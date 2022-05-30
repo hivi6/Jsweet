@@ -149,4 +149,16 @@ public class AstPrinter implements ExprVisitor<String>, StmtVisitor<String> {
         // TODO Auto-generated method stub
         return null;
     }
+
+    @Override
+    public String visit(ReturnStmt stmt) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public String visit(FunExpr expr) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }
