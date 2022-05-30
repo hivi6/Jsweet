@@ -35,7 +35,7 @@
     returnStatement     -> "return" expression ";" ;
     expression          -> comma ;
     comma               -> assignment ("," assignment)* ;
-    assignment          -> IDENTIFIER ("=" | "+=" | "-=" | "*=" | "/=") assignment
+    assignment          -> IDENTIFIER ("=" | "+=" | "-=" | "*=" | "/=" | "%=") assignment
                          | ternary ;
     ternary             -> logicalOr ("?" expression ":" ternary)? ;
     logicalOr           -> logicalAnd ( "or" logicalAnd )* ;
@@ -43,7 +43,7 @@
     equality            -> comparison ( ( "!=" | "==" ) comparison )* ;
     comparison          -> term ( ( ">" | ">=" | "<" | "<=" ) term )* ;
     term                -> factor ( ( "-" | "+" ) factor )* ;
-    factor              -> unary ( ( "/" | "*" ) unary )* ;
+    factor              -> unary ( ( "/" | "*" | "%" ) unary )* ;
     unary               -> ( "!" | "-" | "++" | "--" ) unary
                          | call ;
     call                -> primary ("(" arguments? ")")* ;
@@ -359,7 +359,7 @@ public class Parser {
 
     private Expr assignment() {
         Expr expr = ternary();
-        if (match(EQUAL, PLUS_EQUAL, MINUS_EQUAL, STAR_EQUAL, SLASH_EQUAL)) {
+        if (match(EQUAL, PLUS_EQUAL, MINUS_EQUAL, STAR_EQUAL, SLASH_EQUAL, MOD_EQUAL)) {
             Token equals = previous();
             Expr value = assignment();
             if (expr instanceof VarExpr) {
@@ -434,7 +434,7 @@ public class Parser {
 
     private Expr factor() {
         Expr left = unary();
-        while (match(SLASH, STAR)) {
+        while (match(SLASH, STAR, MOD)) {
             Token op = previous();
             Expr right = unary();
             left = new BinaryExpr(left, op, right);

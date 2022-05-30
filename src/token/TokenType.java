@@ -7,13 +7,14 @@ public enum TokenType {
     SEMICOLON, COMMA, DOT, // ; , .
     QMARK, COLON, // ? :
 
-    ARROW,  // =>
+    ARROW, // =>
 
     // Arithmetic
     PLUS, PLUS_PLUS, PLUS_EQUAL, // + ++ +=
     MINUS, MINUS_MINUS, MINUS_EQUAL, // - -- -=
     STAR, STAR_EQUAL, // * *=
     SLASH, SLASH_EQUAL, // / /=
+    MOD, MOD_EQUAL, // % %=
     // Relational
     EQUAL, EQUAL_EQUAL, // = ==
     BANG, BANG_EQUAL, // ! !=

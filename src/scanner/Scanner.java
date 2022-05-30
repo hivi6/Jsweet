@@ -132,6 +132,9 @@ public class Scanner {
             case '*':
                 addToken(match('=') ? STAR_EQUAL : STAR);
                 break;
+            case '%':
+                addToken(match('=') ? MOD_EQUAL : MOD);
+                break;
             case '/': {
                 if (match('/')) { // '/'
                     // this is a single line comment

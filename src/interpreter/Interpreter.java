@@ -87,6 +87,8 @@ public class Interpreter implements ExprVisitor<Object>, StmtVisitor<Void> {
         switch (expr.op.type) {
             case SLASH:
                 return divideOperation(left, expr.op, right);
+            case MOD:
+                return modOperation(left, expr.op, right);
             case STAR:
                 return multiplyOperation(left, expr.op, right);
             case MINUS:
@@ -212,6 +214,9 @@ public class Interpreter implements ExprVisitor<Object>, StmtVisitor<Void> {
                 break;
             case SLASH_EQUAL:
                 value = divideOperation(varValue, expr.equals, value);
+                break;
+            case MOD_EQUAL:
+                value = modOperation(varValue, expr.equals, value);
                 break;
             default:
                 break;
@@ -494,6 +499,15 @@ public class Interpreter implements ExprVisitor<Object>, StmtVisitor<Void> {
         if ((isInt(left) && isString(right)) || (isString(left) && isInt(right))) {
             // "123" + 45 = "12345"
             return new SwtString(left.toString() + right.toString());
+        }
+        throw unsupportedOperator(op, 2);
+    }
+
+    private Object modOperation(Object left, Token op, Object right) {
+        if (isInt(left, right)) {
+            if ((long) right == 0)
+                throw new SwtRuntimeError(op, "Modulus by zero.");
+            return (long) left % (long) right;
         }
         throw unsupportedOperator(op, 2);
     }
