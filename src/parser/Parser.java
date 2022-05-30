@@ -140,11 +140,10 @@ public class Parser {
 
     private Stmt function(String kind) {
         Token name = consume(IDENTIFIER, "Expect " + kind + " name.");
-
-        return new FunStmt(name, functionBody(kind));
+        return new FunStmt(name, functionBody(kind, true));
     }
 
-    private Expr functionBody(String kind) {
+    private Expr functionBody(String kind, boolean isDecl) {
         consume(LPAREN, "Expect '(' after " + kind + " name.");
         List<Token> params = new ArrayList<>();
         if (!check(RPAREN))
@@ -157,6 +156,8 @@ public class Parser {
             Expr expr = assignment();
             Stmt returnStmt = new ReturnStmt(expr);
             body.add(returnStmt);
+            if (isDecl)
+                consume(SEMICOLON, "Expect ';' after lambda function 'declaration'");
         } else {
             consume(LBRACE, "Expect '{' before " + kind + " body.");
             body = block();
@@ -489,7 +490,7 @@ public class Parser {
         if (match(IDENTIFIER))
             return new VarExpr(previous());
         if (match(FUN))
-            return functionBody("function");
+            return functionBody("function", false);
         throw error(peek(), "Expect expression.");
     }
 
