@@ -54,6 +54,9 @@
     1. [x] Comma expression
     1. [x] Conditional expression
     1. [x] Assignment
+    1. [] Other assignment operators
+    1. [] More postfix and prefix operation
+        - [x] Prefix ++/--
     1. [x] Functional expression
         - [x] lamda expression format
     1. [x] Conditional operators like and, or
@@ -62,6 +65,7 @@
     1. [x] Print Statement
     1. [x] Variable Declaration
     1. [x] Multiple Variable declaration at once.
+    1. [x] Function Declaration.
     1. [x] Block Support
     1. [x] if-else statment support
     1. [x] Loop Support

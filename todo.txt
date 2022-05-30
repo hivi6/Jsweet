@@ -1,6 +1,7 @@
 30.05.2022
 - [x] Add support for do while loops
 - [x] Add support for repeat loops
+- [x] Add ++ and -- prefix operators
 
 25.05.2022
 - [x] Return keyword support

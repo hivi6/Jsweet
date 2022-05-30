@@ -202,6 +202,15 @@ public class Interpreter implements ExprVisitor<Object>, StmtVisitor<Void> {
                 throw unsupportedOperator(expr.op, 1);
             case BANG:
                 return !isTrue(right);
+            case PLUS_PLUS:
+            case MINUS_MINUS:
+                Token name = ((VarExpr) expr.right).name;
+                if (isInt(right)) {
+                    long res = (long) right + (expr.op.type == TokenType.PLUS_PLUS ? 1 : -1);
+                    environment.assign(name, res);
+                    return res;
+                }
+                throw unsupportedOperator(expr.op, 1);
             default:
                 break;
         }

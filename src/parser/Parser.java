@@ -44,7 +44,7 @@
     comparison          -> term ( ( ">" | ">=" | "<" | "<=" ) term )* ;
     term                -> factor ( ( "-" | "+" ) factor )* ;
     factor              -> unary ( ( "/" | "*" ) unary )* ;
-    unary               -> ( "!" | "-" ) unary
+    unary               -> ( "!" | "-" | "++" | "--" ) unary
                          | call ;
     call                -> primary ("(" arguments? ")")* ;
     primary             -> NUMBER | STRING | "true" | "false" | "nil"
@@ -446,6 +446,13 @@ public class Parser {
             Token op = previous();
             Expr right = unary();
             return new UnaryExpr(op, right);
+        } else if (match(PLUS_PLUS, MINUS_MINUS)) {
+            Token op = previous();
+            Expr right = unary();
+            if (right instanceof VarExpr) {
+                return new UnaryExpr(op, right);
+            }
+            throw error(op, "Expect identifier after prefix operator(++/--).");
         }
         return call();
     }

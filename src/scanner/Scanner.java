@@ -124,10 +124,10 @@ public class Scanner {
                 addToken(match('=') ? GREATER_EQUAL : GREATER);
                 break;
             case '+':
-                addToken(PLUS);
+                addToken(match('+') ? PLUS_PLUS : PLUS);
                 break;
             case '-':
-                addToken(MINUS);
+                addToken(match('-') ? MINUS_MINUS : MINUS);
                 break;
             case '*':
                 addToken(STAR);
