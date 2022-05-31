@@ -120,6 +120,6 @@ public class GenerateAst {
                 "RepeatStmt     : Token paren, Expr upto, Stmt body",
                 "BreakStmt      : ",
                 "ContinueStmt   : ",
-                "ReturnStmt     : Expr value"));
+                "ReturnStmt     : Token here, Expr value"));
     }
 }

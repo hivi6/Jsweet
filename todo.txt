@@ -1,3 +1,7 @@
+31.05.2022
+- [x] Add support for symantic analysis
+- [x] Bug fix, i.e. check for return keyword that is not inside a function or a method
+
 30.05.2022
 - [x] Add support for do while loops
 - [x] Add support for repeat loops

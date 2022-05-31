@@ -1,7 +1,9 @@
 package interpreter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import ast.AssignExpr;
 import ast.BinaryExpr;
@@ -45,6 +47,7 @@ import visitor.StmtVisitor;
 public class Interpreter implements ExprVisitor<Object>, StmtVisitor<Void> {
     public final Environment globals = new Environment();
     private Environment environment = globals;
+    private final Map<Expr, Integer> locals = new HashMap<>();
 
     public Interpreter() {
         globals.define("clock", new SwtCallable() {
@@ -193,13 +196,13 @@ public class Interpreter implements ExprVisitor<Object>, StmtVisitor<Void> {
 
     @Override
     public Object visit(VarExpr expr) {
-        return environment.get(expr.name);
+        return lookupVariable(expr.name, expr);
     }
 
     @Override
     public Object visit(AssignExpr expr) {
         Object value = evaluate(expr.value);
-        Object varValue = environment.get(expr.name);
+        Object varValue = lookupVariable(expr.name, expr);
         switch (expr.equals.type) {
             case EQUAL: // no need for any modification to value
                 break;
@@ -510,5 +513,18 @@ public class Interpreter implements ExprVisitor<Object>, StmtVisitor<Void> {
             return (long) left % (long) right;
         }
         throw unsupportedOperator(op, 2);
+    }
+
+    public void resolve(Expr expr, int depth) {
+        locals.put(expr, depth);
+    }
+
+    private Object lookupVariable(Token name, Expr expr) {
+        Integer distance = locals.get(expr);
+        if (distance != null) {
+            return environment.getAt(distance, name.lexeme);
+        } else {
+            return globals.get(name);
+        }
     }
 }

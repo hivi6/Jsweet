@@ -153,8 +153,9 @@ public class Parser {
         // For lambda expression
         List<Stmt> body = new ArrayList<>();
         if (match(ARROW)) {
+            Token here = previous();
             Expr expr = assignment();
-            Stmt returnStmt = new ReturnStmt(expr);
+            Stmt returnStmt = new ReturnStmt(here, expr);
             body.add(returnStmt);
             if (isDecl)
                 consume(SEMICOLON, "Expect ';' after lambda function 'declaration'");
@@ -335,12 +336,12 @@ public class Parser {
     }
 
     private Stmt returnStatement() {
-        // Token keyword = previous();
+        Token keyword = previous();
         Expr value = null;
         if (!check(SEMICOLON))
             value = expression();
         consume(SEMICOLON, "Expect ';' after return keyword");
-        return new ReturnStmt(value);
+        return new ReturnStmt(keyword, value);
     }
 
     private Expr expression() {

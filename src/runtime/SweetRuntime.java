@@ -8,6 +8,7 @@ import java.util.List;
 import ast.Stmt;
 import interpreter.Interpreter;
 import parser.Parser;
+import resolver.Resolver;
 import scanner.Scanner;
 import token.Token;
 import util.Util;
@@ -106,6 +107,13 @@ public class SweetRuntime {
         List<Stmt> statements = parser.parse();
 
         // Stop if there was a syntax error.
+        if (hadError)
+            return;
+
+        var resolver = new Resolver(interpreter);
+        resolver.resolve(statements);
+
+        // check if there was any semantic errors
         if (hadError)
             return;
 

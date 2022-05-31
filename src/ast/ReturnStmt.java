@@ -7,7 +7,8 @@ import token.Token;
 import visitor.StmtVisitor;
 
 public class ReturnStmt extends Stmt {
-    public ReturnStmt(Expr value) {
+    public ReturnStmt(Token here, Expr value) {
+        this.here = here;
         this.value = value;
     }
 
@@ -16,5 +17,6 @@ public class ReturnStmt extends Stmt {
         return visitor.visit(this);
     }
 
+    public final Token here;
     public final Expr value;
 }
