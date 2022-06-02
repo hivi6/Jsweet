@@ -192,7 +192,7 @@ public class Resolver implements ExprVisitor<Void>, StmtVisitor<Void> {
         if (stmt.cond != null)
             resolve(stmt.cond);
         if (stmt.increment != null)
-            resolve(stmt.cond);
+            resolve(stmt.increment);
         resolve(stmt.body);
         endScope();
         return null;
