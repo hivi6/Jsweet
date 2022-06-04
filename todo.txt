@@ -2,6 +2,7 @@
 - [x] Add inheritance support
     - [x] Super-class specifier
     - [x] super keyword support
+- [x] Add array support
 
 3.06.2022
 - [x] Add class support

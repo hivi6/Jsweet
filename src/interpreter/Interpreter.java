@@ -35,6 +35,7 @@ import ast.UnaryExpr;
 import ast.VarExpr;
 import ast.VarStmt;
 import ast.WhileStmt;
+import callable.SwtArray;
 import callable.SwtCallable;
 import callable.SwtClass;
 import callable.SwtFunction;
@@ -71,6 +72,22 @@ public class Interpreter implements ExprVisitor<Object>, StmtVisitor<Void> {
             @Override
             public String toString() {
                 return "<native fn>";
+            }
+        });
+
+        globals.define("array", new SwtCallable() {
+            @Override
+            public int arity() {
+                return 1;
+            }
+
+            @Override
+            public Object call(Interpreter interpreter, List<Object> arguments) {
+                if (!isInt(arguments.get(0))) {
+                    throw new RuntimeException("array size has to be an integer.");
+                }
+                long sz = (long) arguments.get(0);
+                return new SwtArray(sz);
             }
         });
     }

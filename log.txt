@@ -1,5 +1,6 @@
 04.06.2022
 Add inheritance support
+Added array support
 
 03.06.2022
 While playing with the interpreter there is a bug related to prefix and postfix Operations(
