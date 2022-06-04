@@ -1,7 +1,9 @@
-package callable;
+package types;
 
 import java.util.List;
 
+import callable.SwtCallable;
+import callable.SwtInstance;
 import interpreter.Interpreter;
 import runtime.SwtRuntimeError;
 import token.Token;

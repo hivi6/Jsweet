@@ -25,7 +25,7 @@ public enum TokenType {
     IDENTIFIER, STRING, INT,
 
     // Keywords
-    TRUE, FALSE, NIL, // Constants
+    TRUE, FALSE, NULL, // Constants
     AND, OR, // Logical
     PRINT, // For debuging
     VAR, // Variable Declaration

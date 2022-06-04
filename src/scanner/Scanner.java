@@ -24,7 +24,7 @@ public class Scanner {
         keywords = new HashMap<>();
         keywords.put("true", TRUE);
         keywords.put("false", FALSE);
-        keywords.put("nil", NIL);
+        keywords.put("null", NULL);
         keywords.put("and", AND);
         keywords.put("or", OR);
         keywords.put("print", PRINT);

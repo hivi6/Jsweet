@@ -518,7 +518,7 @@ public class Parser {
             return new LiteralExpr(true);
         if (match(FALSE))
             return new LiteralExpr(false);
-        if (match(NIL))
+        if (match(NULL))
             return new LiteralExpr(null);
         if (match(LPAREN)) {
             Expr expr = expression();
