@@ -16,4 +16,5 @@ public interface StmtVisitor<R> {
     R visit (BreakStmt stmt);
     R visit (ContinueStmt stmt);
     R visit (ReturnStmt stmt);
+    R visit (ClassStmt stmt);
 }

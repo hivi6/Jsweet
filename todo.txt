@@ -1,3 +1,12 @@
+3.06.2022
+- [] Add class support
+    - [x] Add class declaration support
+    - [x] Add instance creation support
+    - [x] Add member call support
+    - [x] Add member property set value support
+    - [x] Add "this" keyword support 
+    - [x] Add support for constructor
+
 31.05.2022
 - [x] Add support for symantic analysis
 - [x] Bug fix, i.e. check for return keyword that is not inside a function or a method

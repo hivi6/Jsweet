@@ -1,9 +1,11 @@
 
 /*
     program             -> statement* EOF ;
-    declaration         -> varDeclaration
+    declaration         -> classDeclaration
+                         | varDeclaration
                          | functionDeclaration
                          | statement ;
+    classDeclaration    -> "class" IDENTIFIER "{" function* "}" ;
     varDeclaration      -> "var" IDENTIFIER ("=" assignment)? ("," IDENTIFIER ("=" assignment))* ";" ;
     functionDeclaration -> "fun" function ;
     function            -> IDENTIFIER functionBody ;
@@ -35,7 +37,7 @@
     returnStatement     -> "return" expression ";" ;
     expression          -> comma ;
     comma               -> assignment ("," assignment)* ;
-    assignment          -> IDENTIFIER ("=" | "+=" | "-=" | "*=" | "/=" | "%=") assignment
+    assignment          -> (call ".")? IDENTIFIER ("=" | "+=" | "-=" | "*=" | "/=" | "%=") assignment
                          | ternary ;
     ternary             -> logicalOr ("?" expression ":" ternary)? ;
     logicalOr           -> logicalAnd ( "or" logicalAnd )* ;
@@ -46,9 +48,9 @@
     factor              -> unary ( ( "/" | "*" | "%" ) unary )* ;
     unary               -> ( "!" | "-" | "++" | "--" ) unary
                          | call ;
-    call                -> primary ("(" arguments? ")")* ;
+    call                -> primary ("(" arguments? ")" | "." IDENTIFIER)* ;
     primary             -> NUMBER | STRING | "true" | "false" | "nil"
-                         | "(" expression ")" | IDENTIFIER | functionExpr ;
+                         | "(" expression ")" | IDENTIFIER | functionExpr | "this";
     functionExpr        -> "fun" functionBody ;
 */
 
@@ -62,6 +64,7 @@ import ast.BinaryExpr;
 import ast.BlockStmt;
 import ast.BreakStmt;
 import ast.CallExpr;
+import ast.ClassStmt;
 import ast.ContinueStmt;
 import ast.DoWhileStmt;
 import ast.Expr;
@@ -69,6 +72,7 @@ import ast.ExprStmt;
 import ast.ForStmt;
 import ast.FunExpr;
 import ast.FunStmt;
+import ast.GetExpr;
 import ast.GroupExpr;
 import ast.IfStmt;
 import ast.LiteralExpr;
@@ -76,8 +80,10 @@ import ast.LogicalExpr;
 import ast.PrintStmt;
 import ast.RepeatStmt;
 import ast.ReturnStmt;
+import ast.SetExpr;
 import ast.Stmt;
 import ast.TernaryExpr;
+import ast.ThisExpr;
 import ast.UnaryExpr;
 import ast.VarExpr;
 import ast.VarStmt;
@@ -112,6 +118,8 @@ public class Parser {
 
     private Stmt declaration() {
         try {
+            if (match(CLASS))
+                return classDeclaration();
             if (match(VAR))
                 return varDeclaration();
             if (check(FUN) && checkNext(IDENTIFIER)) {
@@ -123,6 +131,20 @@ public class Parser {
             synchronize();
             return null;
         }
+    }
+
+    private Stmt classDeclaration() {
+        Token name = consume(IDENTIFIER, "Expect class name.");
+        consume(LBRACE, "Expect '{' after class name.");
+
+        List<FunStmt> methods = new ArrayList<>();
+        while (!check(RBRACE) && !isEnd()) {
+            methods.add(function("method"));
+        }
+
+        consume(RBRACE, "Expect '}' after class body.");
+
+        return new ClassStmt(name, methods);
     }
 
     private Stmt varDeclaration() {
@@ -138,7 +160,7 @@ public class Parser {
         return new VarStmt(vars);
     }
 
-    private Stmt function(String kind) {
+    private FunStmt function(String kind) {
         Token name = consume(IDENTIFIER, "Expect " + kind + " name.");
         return new FunStmt(name, functionBody(kind, true));
     }
@@ -366,6 +388,9 @@ public class Parser {
             if (expr instanceof VarExpr) {
                 Token name = ((VarExpr) expr).name;
                 return new AssignExpr(name, equals, value);
+            } else if (expr instanceof GetExpr) {
+                GetExpr get = (GetExpr) expr;
+                return new SetExpr(get.object, get.name, value);
             }
             error(equals, "Invalid assignment target");
         }
@@ -451,7 +476,7 @@ public class Parser {
         } else if (match(PLUS_PLUS, MINUS_MINUS)) {
             Token op = previous();
             Expr right = unary();
-            if (right instanceof VarExpr) {
+            if (right instanceof VarExpr || right instanceof GetExpr) {
                 return new UnaryExpr(op, right);
             }
             throw error(op, "Expect identifier after prefix operator(++/--).");
@@ -468,6 +493,9 @@ public class Parser {
                     args = arguments();
                 Token paren = consume(RPAREN, "Expect ')' after function arguments.");
                 callee = new CallExpr(callee, paren, args);
+            } else if (match(DOT)) {
+                Token name = consume(IDENTIFIER, "Expect member name after '.'.");
+                callee = new GetExpr(callee, name);
             } else
                 break;
         }
@@ -492,6 +520,8 @@ public class Parser {
             return new VarExpr(previous());
         if (match(FUN))
             return functionBody("function", false);
+        if (match(THIS))
+            return new ThisExpr(previous());
         throw error(peek(), "Expect expression.");
     }
 

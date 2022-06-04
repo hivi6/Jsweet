@@ -76,6 +76,6 @@
         - [x] repeat loop
     1. [x] Break and continue support
     1. [x] Return support
-    1. [] Class support
+    1. [x] Class support
     1. [] Inheritance support
     1. [] Array support

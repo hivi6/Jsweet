@@ -10,6 +10,7 @@ import ast.BinaryExpr;
 import ast.BlockStmt;
 import ast.BreakStmt;
 import ast.CallExpr;
+import ast.ClassStmt;
 import ast.ContinueStmt;
 import ast.DoWhileStmt;
 import ast.Expr;
@@ -17,6 +18,7 @@ import ast.ExprStmt;
 import ast.ForStmt;
 import ast.FunExpr;
 import ast.FunStmt;
+import ast.GetExpr;
 import ast.GroupExpr;
 import ast.IfStmt;
 import ast.LiteralExpr;
@@ -24,14 +26,18 @@ import ast.LogicalExpr;
 import ast.PrintStmt;
 import ast.RepeatStmt;
 import ast.ReturnStmt;
+import ast.SetExpr;
 import ast.Stmt;
 import ast.TernaryExpr;
+import ast.ThisExpr;
 import ast.UnaryExpr;
 import ast.VarExpr;
 import ast.VarStmt;
 import ast.WhileStmt;
 import callable.SwtCallable;
+import callable.SwtClass;
 import callable.SwtFunction;
+import callable.SwtInstance;
 import runtime.BreakException;
 import runtime.ContinueException;
 import runtime.ReturnException;
@@ -171,13 +177,22 @@ public class Interpreter implements ExprVisitor<Object>, StmtVisitor<Void> {
                 return !isTrue(right);
             case PLUS_PLUS:
             case MINUS_MINUS:
-                Token name = ((VarExpr) expr.right).name;
-                if (isInt(right)) {
-                    long res = (long) right + (expr.op.type == TokenType.PLUS_PLUS ? 1 : -1);
+                if (!isInt(right))
+                    throw unsupportedOperator(expr.op, 1);
+
+                long res = (long) right + (expr.op.type == TokenType.PLUS_PLUS ? 1 : -1);
+                if (expr.right instanceof VarExpr) {
+                    Token name = ((VarExpr) expr.right).name;
                     environment.assign(name, res);
-                    return res;
+                } else if (expr.right instanceof GetExpr) {
+                    var get = (GetExpr) expr.right;
+                    Object object = evaluate(get.object);
+                    if (!(object instanceof SwtInstance)) {
+                        throw new SwtRuntimeError(get.name, "Only instances have fields.");
+                    }
+                    ((SwtInstance) object).set(get.name, res);
                 }
-                throw unsupportedOperator(expr.op, 1);
+                return res;
             default:
                 break;
         }
@@ -250,7 +265,32 @@ public class Interpreter implements ExprVisitor<Object>, StmtVisitor<Void> {
 
     @Override
     public Object visit(FunExpr expr) {
-        return new SwtFunction(null, expr, environment);
+        return new SwtFunction(null, expr, environment, false);
+    }
+
+    @Override
+    public Object visit(GetExpr expr) {
+        Object object = evaluate(expr.object);
+        if (object instanceof SwtInstance) {
+            return ((SwtInstance) object).get(expr.name);
+        }
+        throw new SwtRuntimeError(expr.name, "Only instances have property");
+    }
+
+    @Override
+    public Object visit(SetExpr expr) {
+        Object object = evaluate(expr.object);
+        if (!(object instanceof SwtInstance)) {
+            throw new SwtRuntimeError(expr.name, "Only instances have fields.");
+        }
+        Object value = evaluate(expr.value);
+        ((SwtInstance) object).set(expr.name, value);
+        return value;
+    }
+
+    @Override
+    public Object visit(ThisExpr expr) {
+        return lookupVariable(expr.keyword, expr);
     }
 
     @Override
@@ -375,7 +415,7 @@ public class Interpreter implements ExprVisitor<Object>, StmtVisitor<Void> {
 
     @Override
     public Void visit(FunStmt stmt) {
-        SwtFunction function = new SwtFunction(stmt.name.lexeme, (FunExpr) stmt.function, environment);
+        SwtFunction function = new SwtFunction(stmt.name.lexeme, (FunExpr) stmt.function, environment, false);
         environment.define(stmt.name.lexeme, function);
         return null;
     }
@@ -386,6 +426,22 @@ public class Interpreter implements ExprVisitor<Object>, StmtVisitor<Void> {
         if (stmt.value != null)
             value = evaluate(stmt.value);
         throw new ReturnException(value);
+    }
+
+    @Override
+    public Void visit(ClassStmt stmt) {
+        environment.define(stmt.name.lexeme, null);
+
+        Map<String, SwtFunction> methods = new HashMap<>();
+        for (var method : stmt.methods) {
+            SwtFunction function = new SwtFunction(method.name.lexeme, (FunExpr) method.function, environment,
+                    method.name.lexeme.equals("init"));
+            methods.put(method.name.lexeme, function);
+        }
+
+        SwtClass newClass = new SwtClass(stmt.name.lexeme, methods);
+        environment.assign(stmt.name, newClass);
+        return null;
     }
 
     // **********

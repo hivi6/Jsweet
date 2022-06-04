@@ -11,11 +11,19 @@ public class SwtFunction implements SwtCallable {
     private final String name;
     private final FunExpr declaration;
     private final Environment closure;
+    private final boolean isInitializer;
 
-    public SwtFunction(String name, FunExpr declaration, Environment closure) {
+    public SwtFunction(String name, FunExpr declaration, Environment closure, boolean isInitializer) {
+        this.isInitializer = isInitializer;
         this.name = name;
         this.declaration = declaration;
         this.closure = closure;
+    }
+
+    public SwtFunction bind(SwtInstance instance) {
+        Environment environment = new Environment(closure);
+        environment.define("this", instance);
+        return new SwtFunction(name, declaration, environment, isInitializer);
     }
 
     @Override
@@ -27,8 +35,12 @@ public class SwtFunction implements SwtCallable {
         try {
             interpreter.executeBlock(declaration.body, environment);
         } catch (ReturnException e) {
+            if (isInitializer)
+                return closure.getAt(0, "this");
             return e.value;
         }
+        if (isInitializer)
+            return closure.getAt(0, "this");
         return null;
     }
 

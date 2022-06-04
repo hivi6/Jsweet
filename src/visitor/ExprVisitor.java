@@ -13,4 +13,7 @@ public interface ExprVisitor<R> {
     R visit (LiteralExpr expr);
     R visit (VarExpr expr);
     R visit (FunExpr expr);
+    R visit (GetExpr expr);
+    R visit (SetExpr expr);
+    R visit (ThisExpr expr);
 }

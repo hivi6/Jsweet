@@ -105,7 +105,10 @@ public class GenerateAst {
                 "GroupExpr      : Expr expr",
                 "LiteralExpr    : Object val",
                 "VarExpr        : Token name",
-                "FunExpr        : List<Token> params, List<Stmt> body"));
+                "FunExpr        : List<Token> params, List<Stmt> body",
+                "GetExpr        : Expr object, Token name",
+                "SetExpr        : Expr object, Token name, Expr value",
+                "ThisExpr       : Token keyword"));
 
         defineAst(srcPath, "Stmt", Arrays.asList(
                 "ExprStmt       : Expr expr",
@@ -120,6 +123,7 @@ public class GenerateAst {
                 "RepeatStmt     : Token paren, Expr upto, Stmt body",
                 "BreakStmt      : ",
                 "ContinueStmt   : ",
-                "ReturnStmt     : Token here, Expr value"));
+                "ReturnStmt     : Token here, Expr value",
+                "ClassStmt      : Token name, List<FunStmt> methods"));
     }
 }
