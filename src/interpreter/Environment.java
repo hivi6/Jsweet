@@ -7,7 +7,7 @@ import runtime.SwtRuntimeError;
 import token.Token;
 
 public class Environment {
-    private Environment enclosing;
+    public Environment enclosing;
     private final Map<String, Object> values = new HashMap<>();
 
     public Environment() {

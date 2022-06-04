@@ -7,10 +7,12 @@ import interpreter.Interpreter;
 
 public class SwtClass implements SwtCallable {
     final String name;
+    final SwtClass superClass;
     private final Map<String, SwtFunction> methods;
 
-    public SwtClass(String name, Map<String, SwtFunction> methods) {
+    public SwtClass(String name, SwtClass superClass, Map<String, SwtFunction> methods) {
         this.name = name;
+        this.superClass = superClass;
         this.methods = methods;
     }
 
@@ -18,6 +20,9 @@ public class SwtClass implements SwtCallable {
         if (methods.containsKey(name)) {
             return methods.get(name);
         }
+
+        if (superClass != null)
+            return superClass.findMethod(name);
 
         return null;
     }

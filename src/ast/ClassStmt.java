@@ -7,8 +7,9 @@ import token.Token;
 import visitor.StmtVisitor;
 
 public class ClassStmt extends Stmt {
-    public ClassStmt(Token name, List<FunStmt> methods) {
+    public ClassStmt(Token name, VarExpr superClass, List<FunStmt> methods) {
         this.name = name;
+        this.superClass = superClass;
         this.methods = methods;
     }
 
@@ -18,5 +19,6 @@ public class ClassStmt extends Stmt {
     }
 
     public final Token name;
+    public final VarExpr superClass;
     public final List<FunStmt> methods;
 }

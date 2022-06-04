@@ -28,6 +28,7 @@ import ast.RepeatStmt;
 import ast.ReturnStmt;
 import ast.SetExpr;
 import ast.Stmt;
+import ast.SuperExpr;
 import ast.TernaryExpr;
 import ast.ThisExpr;
 import ast.UnaryExpr;
@@ -294,6 +295,19 @@ public class Interpreter implements ExprVisitor<Object>, StmtVisitor<Void> {
     }
 
     @Override
+    public Object visit(SuperExpr expr) {
+        int distance = locals.get(expr);
+        var superClass = (SwtClass) environment.getAt(distance, "super");
+        var object = (SwtInstance) environment.getAt(distance - 1, "this");
+        var method = superClass.findMethod(expr.method.lexeme);
+        if (method == null) {
+            throw new SwtRuntimeError(expr.method,
+                    "Undefined property '" + expr.method.lexeme + "'.");
+        }
+        return method.bind(object);
+    }
+
+    @Override
     public Void visit(ExprStmt stmt) {
         evaluate(stmt.expr);
         return null;
@@ -430,7 +444,19 @@ public class Interpreter implements ExprVisitor<Object>, StmtVisitor<Void> {
 
     @Override
     public Void visit(ClassStmt stmt) {
+        Object superClass = null;
+        if (stmt.superClass != null) {
+            superClass = evaluate(stmt.superClass);
+            if (!(superClass instanceof SwtClass))
+                throw new SwtRuntimeError(stmt.superClass.name, "Superclass must be a class");
+        }
+
         environment.define(stmt.name.lexeme, null);
+
+        if (stmt.superClass != null) {
+            environment = new Environment(environment);
+            environment.define("super", superClass);
+        }
 
         Map<String, SwtFunction> methods = new HashMap<>();
         for (var method : stmt.methods) {
@@ -439,7 +465,10 @@ public class Interpreter implements ExprVisitor<Object>, StmtVisitor<Void> {
             methods.put(method.name.lexeme, function);
         }
 
-        SwtClass newClass = new SwtClass(stmt.name.lexeme, methods);
+        SwtClass newClass = new SwtClass(stmt.name.lexeme, (SwtClass) superClass, methods);
+        if (superClass != null) {
+            environment = environment.enclosing;
+        }
         environment.assign(stmt.name, newClass);
         return null;
     }

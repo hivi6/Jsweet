@@ -5,7 +5,7 @@
                          | varDeclaration
                          | functionDeclaration
                          | statement ;
-    classDeclaration    -> "class" IDENTIFIER "{" function* "}" ;
+    classDeclaration    -> "class" IDENTIFIER ("<" IDENTIFIER)? "{" function* "}" ;
     varDeclaration      -> "var" IDENTIFIER ("=" assignment)? ("," IDENTIFIER ("=" assignment))* ";" ;
     functionDeclaration -> "fun" function ;
     function            -> IDENTIFIER functionBody ;
@@ -50,7 +50,8 @@
                          | call ;
     call                -> primary ("(" arguments? ")" | "." IDENTIFIER)* ;
     primary             -> NUMBER | STRING | "true" | "false" | "nil"
-                         | "(" expression ")" | IDENTIFIER | functionExpr | "this";
+                         | "(" expression ")" | IDENTIFIER | functionExpr | "this"
+                         | "super" "." IDENTIFIER;
     functionExpr        -> "fun" functionBody ;
 */
 
@@ -82,6 +83,7 @@ import ast.RepeatStmt;
 import ast.ReturnStmt;
 import ast.SetExpr;
 import ast.Stmt;
+import ast.SuperExpr;
 import ast.TernaryExpr;
 import ast.ThisExpr;
 import ast.UnaryExpr;
@@ -135,6 +137,13 @@ public class Parser {
 
     private Stmt classDeclaration() {
         Token name = consume(IDENTIFIER, "Expect class name.");
+
+        VarExpr superClass = null;
+        if (match(LESS)) {
+            consume(IDENTIFIER, "Expect superclass name");
+            superClass = new VarExpr(previous());
+        }
+
         consume(LBRACE, "Expect '{' after class name.");
 
         List<FunStmt> methods = new ArrayList<>();
@@ -144,7 +153,7 @@ public class Parser {
 
         consume(RBRACE, "Expect '}' after class body.");
 
-        return new ClassStmt(name, methods);
+        return new ClassStmt(name, superClass, methods);
     }
 
     private Stmt varDeclaration() {
@@ -522,6 +531,12 @@ public class Parser {
             return functionBody("function", false);
         if (match(THIS))
             return new ThisExpr(previous());
+        if (match(SUPER)) {
+            Token keyword = previous();
+            consume(DOT, "Expect '.' after super keyword.");
+            Token method = consume(IDENTIFIER, "Expect superclass method name.");
+            return new SuperExpr(keyword, method);
+        }
         throw error(peek(), "Expect expression.");
     }
 

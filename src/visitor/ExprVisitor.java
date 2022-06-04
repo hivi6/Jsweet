@@ -16,4 +16,5 @@ public interface ExprVisitor<R> {
     R visit (GetExpr expr);
     R visit (SetExpr expr);
     R visit (ThisExpr expr);
+    R visit (SuperExpr expr);
 }

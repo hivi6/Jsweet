@@ -1,5 +1,10 @@
+4.06.2022
+- [x] Add inheritance support
+    - [x] Super-class specifier
+    - [x] super keyword support
+
 3.06.2022
-- [] Add class support
+- [x] Add class support
     - [x] Add class declaration support
     - [x] Add instance creation support
     - [x] Add member call support
