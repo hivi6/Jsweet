@@ -16,7 +16,6 @@ $(JAR_DIR)/$(TARGET_JAR): compile
 
 compile: $(SRCS)
 	$(JAVAC) -d $(CLASS_DIR) $(SRCS)
-	@echo $(CLASSES)
 
 clean:
 	rm -r $(BUILD_DIR)
