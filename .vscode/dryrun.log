@@ -1,0 +1,9 @@
+make.exe --dry-run --always-make --keep-going --print-directory
+File not found - *.java
+
+make.exe: Entering directory `d:/dev/project/jsweet'
+"C:/Program Files/Java/jdk-13.0.1/bin/javac.exe" -d ./build/classes 
+mkdir -p build/jar/
+"C:/Program Files/Java/jdk-13.0.1/bin/jar.exe" --verbose --create --file build/jar/sweet.jar --main-class Sweet -C ./build/classes .
+make.exe: Leaving directory `d:/dev/project/jsweet'
+ 

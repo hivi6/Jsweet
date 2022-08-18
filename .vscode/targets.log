@@ -1,0 +1,325 @@
+make.exe all --print-data-base --no-builtin-variables --no-builtin-rules --question
+# GNU Make 3.81
+# Copyright (C) 2006  Free Software Foundation, Inc.
+# This is free software; see the source for copying conditions.
+# There is NO warranty; not even for MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE.
+
+# This program built for i386-pc-mingw32
+ 
+File not found - *.java
+make.exe: *** No rule to make target `all'.  Stop.
+
+
+# Make data base, printed on Thu Aug 18 11:34:57 2022
+
+# Variables
+
+# automatic
+<D = $(patsubst %/,%,$(dir $<))
+# automatic
+?F = $(notdir $?)
+# makefile
+MAKEFLAGS = Rrqp
+# automatic
+?D = $(patsubst %/,%,$(dir $?))
+# automatic
+@D = $(patsubst %/,%,$(dir $@))
+# environment
+HOMEDRIVE = C:
+# automatic
+@F = $(notdir $@)
+# automatic
+^D = $(patsubst %/,%,$(dir $^))
+# makefile
+CURDIR := d:/dev/project/jsweet
+# default
+SHELL := sh.exe
+# environment
+WINDIR = C:\WINDOWS
+# environment
+VSCODE_NLS_CONFIG = {"locale":"en-us","availableLanguages":{},"_languagePackSupport":true}
+# environment
+VBOX_MSI_INSTALL_PATH = C:\Program Files\Oracle\VirtualBox\
+# environment
+ONEDRIVE = C:\Users\0x0\OneDrive
+# environment
+PATHEXT = .COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC
+# makefile (from `makefile', line 1)
+MAKEFILE_LIST :=  makefile
+# environment
+TMP = C:\Users\0x0\AppData\Local\Temp
+# makefile (from `makefile', line 6)
+CLASS_DIR := ./build/classes
+# environment
+PROGRAMW6432 = C:\Program Files
+# environment
+PROGRAMDATA = C:\ProgramData
+# environment
+VSCODE_CWD = C:\WINDOWS\system32
+# environment
+PATH = C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\Intel\WiFi\bin\;C:\Program Files\Common Files\Intel\WirelessCommon\;C:\Program Files\nodejs\;C:\Program Files\PuTTY\;C:\Program Files\MATLAB\R2022a\bin;C:\Program Files\Git\cmd;C:\Program Files\Go\bin;D:\Programs\anaconda3\condabin;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\Intel\WiFi\bin\;C:\Program Files\Common Files\Intel\WirelessCommon\;C:\Program Files\nodejs\;C:\Program Files\Git\cmd;C:\Program Files\MySQL\MySQL Shell 8.0\bin\;C:\Users\0x0\AppData\Local\Microsoft\WindowsApps;C:\Users\0x0\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\0x0\AppData\Local\Programs\Python\Python39-32\;C:\Users\0x0\AppData\Local\Programs\Python\Python39-32\Scripts;C:\Program Files (x86)\Tesseract-OCR;C:\Users\0x0\AppData\Local\Programs\Python\Python39;C:\flutter\bin;C:\msys64\mingw64\bin;C:\Program Files (x86)\GnuWin32\bin;C:\Program Files\Java\jdk-13.0.1\bin;C:\Users\0x0\AppData\Local\Programs\Hyper\resources\bin;C:\Program Files\Graphviz\bin;D:\Programs;C:\Users\0x0\go\bin
+# makefile (from `makefile', line 7)
+JAR_DIR := ./build/jar
+# environment
+COMMONPROGRAMW6432 = C:\Program Files\Common Files
+# environment
+PROCESSOR_ARCHITECTURE = x86
+# environment
+USERPROFILE = C:\Users\0x0
+# environment
+ALLUSERSPROFILE = C:\ProgramData
+# environment
+GOPATH = C:\Users\0x0\go
+# environment
+NUMBER_OF_PROCESSORS = 8
+# environment
+ELECTRON_RUN_AS_NODE = 1
+# default
+.FEATURES := target-specific order-only second-expansion else-if archives
+# automatic
+%F = $(notdir $%)
+# environment
+CHROME_CRASHPAD_PIPE_NAME = \\.\pipe\crashpad_19944_XDBOAVCAGOCWSRWZ
+# environment
+COMPUTERNAME = SAINA
+# environment
+PROGRAMFILES = C:\Program Files (x86)
+# environment
+DRIVERDATA = C:\Windows\System32\Drivers\DriverData
+# makefile (from `makefile', line 8)
+TARGET_JAR := sweet.jar
+# environment
+ORIGINAL_XDG_CURRENT_DESKTOP = undefined
+# environment
+USERNAME = 0x0
+# environment
+PUBLIC = C:\Users\Public
+# environment
+VSCODE_AMD_ENTRYPOINT = vs/workbench/api/node/extensionHostProcess
+# makefile (from `makefile', line 2)
+JAR := "C:/Program Files/Java/jdk-13.0.1/bin/jar.exe"
+# environment
+VSCODE_CODE_CACHE_PATH = C:\Users\0x0\AppData\Roaming\Code\CachedData\6d9b74a70ca9c7733b29f0456fd8195364076dda
+# environment
+APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL = 1
+# environment
+COMMONPROGRAMFILES = C:\Program Files (x86)\Common Files
+# environment
+LOGONSERVER = \\SAINA
+# environment
+ONEDRIVECONSUMER = C:\Users\0x0\OneDrive
+# environment
+VSCODE_HANDLES_UNCAUGHT_ERRORS = true
+# environment
+USERDOMAIN = SAINA
+# makefile (from `makefile', line 11)
+MAIN_CLASS := Sweet
+# default
+MAKE = $(MAKE_COMMAND)
+# default
+MAKECMDGOALS := all
+# makefile (from `makefile', line 10)
+SRCS := 
+# environment
+JAVA_HOME = C:/Program Files/Java/jdk-13.0.1
+# makefile (from `makefile', line 5)
+BUILD_DIR := ./build
+# default
+MAKE_VERSION := 3.81
+# makefile
+.DEFAULT_GOAL := build/jar/sweet.jar
+# environment
+PROGRAMFILES(X86) = C:\Program Files (x86)
+# automatic
+%D = $(patsubst %/,%,$(dir $%))
+# environment
+LOCALAPPDATA = C:\Users\0x0\AppData\Local
+# environment
+PSMODULEPATH = C:\Program Files\WindowsPowerShell\Modules;C:\WINDOWS\system32\WindowsPowerShell\v1.0\Modules
+# default
+MAKE_COMMAND := make.exe
+# environment
+PROCESSOR_ARCHITEW6432 = AMD64
+# default
+.VARIABLES := 
+# automatic
+*F = $(notdir $*)
+# environment
+PROCESSOR_IDENTIFIER = Intel64 Family 6 Model 142 Stepping 10, GenuineIntel
+# environment
+OS = Windows_NT
+# environment
+VSCODE_IPC_HOOK = \\.\pipe\51a589a532e91c15956114878717eb72-1.70.1-main-sock
+# environment
+HOMEPATH = \Users\0x0
+# environment
+COMMONPROGRAMFILES(X86) = C:\Program Files (x86)\Common Files
+# environment
+PROMPT = $P$G
+# environment
+MFLAGS = -Rrqp
+# automatic
+*D = $(patsubst %/,%,$(dir $*))
+# environment
+SYSTEMROOT = C:\WINDOWS
+# automatic
++D = $(patsubst %/,%,$(dir $+))
+# automatic
++F = $(notdir $+)
+# environment
+APPDATA = C:\Users\0x0\AppData\Roaming
+# environment
+TEMP = C:\Users\0x0\AppData\Local\Temp
+# environment
+COMSPEC = C:\WINDOWS\system32\cmd.exe
+# default
+MAKEFILES := 
+# makefile (from `makefile', line 4)
+SRC_DIR := ./src
+# automatic
+<F = $(notdir $<)
+# environment
+VS160COMCOMNTOOLS = C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\Tools\
+# environment
+LC_ALL = C
+# automatic
+^F = $(notdir $^)
+# default
+SUFFIXES := 
+# environment
+SYSTEMDRIVE = C:
+# environment
+SESSIONNAME = Console
+# environment
+PROCESSOR_REVISION = 8e0a
+# environment
+MAKELEVEL := 0
+# makefile (from `makefile', line 1)
+JAVAC := "C:/Program Files/Java/jdk-13.0.1/bin/javac.exe"
+# environment
+LANG = C
+# environment
+PROCESSOR_LEVEL = 6
+# environment
+VSCODE_PID = 19944
+# environment
+USERDOMAIN_ROAMINGPROFILE = SAINA
+# variable set hash-table stats:
+# Load=95/1024=9%, Rehash=0, Collisions=10/126=8%
+
+# Pattern-specific Variable Values
+
+# No pattern-specific variable values.
+
+# Directories
+
+# C:\flutter\bin (key C:/flutter/bin, mtime 1624254362): 9 files, no impossibilities.
+# C:\Users\0x0\AppData\Local\Programs\Python\Python39 (key C:/Users/0x0/AppData/Local/Programs/Python/Python39, mtime 1642872693): 19 files, no impossibilities.
+# C:\Program Files\Go\bin (key C:/Program Files/Go/bin, mtime 1656661129): 4 files, no impossibilities.
+# C:\Users\0x0\AppData\Local\Programs\Hyper\resources\bin (key C:/Users/0x0/AppData/Local/Programs/Hyper/resources/bin, mtime 1633769202): 6 files, no impossibilities.
+# C:\Program Files\Java\jdk-13.0.1\bin (key C:/Program Files/Java/jdk-13.0.1/bin, mtime 1580760794): 126 files, no impossibilities.
+# C:\WINDOWS\System32\WindowsPowerShell\v1.0\ (key C:/WINDOWS/System32/WindowsPowerShell/v1.0/, mtime 1616273755): 30 files, no impossibilities.
+# C:\Program Files (x86)\Tesseract-OCR (key C:/Program Files (x86)/Tesseract-OCR, mtime 1618323268): 84 files, no impossibilities.
+# C:\WINDOWS\System32\Wbem (key C:/WINDOWS/System32/Wbem, mtime 1657865014): 153 files, no impossibilities.
+# . (key d:/dev/project/jsweet, mtime 1655477665): 12 files, no impossibilities.
+# C:\Users\0x0\AppData\Local\Microsoft\WindowsApps (key C:/Users/0x0/AppData/Local/Microsoft/WindowsApps, mtime 1659843296): 24 files, no impossibilities.
+# D:\Programs\anaconda3\condabin (key D:/Programs/anaconda3/condabin, mtime 1623419431): 9 files, no impossibilities.
+# C:\Program Files\nodejs\ (key C:/Program Files/nodejs/, mtime 1596131705): 11 files, no impossibilities.
+# C:\Users\0x0\go\bin (key C:/Users/0x0/go/bin, mtime 1656661338): 4 files, no impossibilities.
+# C:\Program Files\MySQL\MySQL Shell 8.0\bin\ (key C:/Program Files/MySQL/MySQL Shell 8.0/bin/, mtime 1633453704): 8 files, no impossibilities.
+# C:\Users\0x0\AppData\Local\Programs\Python\Python39-32\ (key C:/Users/0x0/AppData/Local/Programs/Python/Python39-32/, mtime 1623397471): 5 files, no impossibilities.
+# C:\WINDOWS\System32\OpenSSH\: could not be stat'd.
+# C:\Program Files\PuTTY\ (key C:/Program Files/PuTTY/, mtime 1648198183): 12 files, no impossibilities.
+# C:\Users\0x0\AppData\Local\Programs\Python\Python39-32\Scripts (key C:/Users/0x0/AppData/Local/Programs/Python/Python39-32/Scripts, mtime 1622816488): 22 files, no impossibilities.
+# C:\WINDOWS (key C:/WINDOWS, mtime 1660378203): 114 files, no impossibilities.
+# C:\Program Files\Intel\WiFi\bin\ (key C:/Program Files/Intel/WiFi/bin/, mtime 1653722375): 3 files, no impossibilities.
+# C:\Program Files\Common Files\Intel\WirelessCommon\ (key C:/Program Files/Common Files/Intel/WirelessCommon/, mtime 1580745606): 7 files, no impossibilities.
+# C:\Program Files\MATLAB\R2022a\bin (key C:/Program Files/MATLAB/R2022a/bin, mtime 1654074153): 15 files, no impossibilities.
+# C:\msys64\mingw64\bin (key C:/msys64/mingw64/bin, mtime 1644563261): 862 files, no impossibilities.
+# C:\Program Files\Git\cmd (key C:/Program Files/Git/cmd, mtime 1656406935): 8 files, no impossibilities.
+# C:\WINDOWS\system32 (key C:/WINDOWS/system32, mtime 1660378424): 3011 files, no impossibilities.
+# C:\Users\0x0\AppData\Local\Programs\Microsoft VS Code\bin (key C:/Users/0x0/AppData/Local/Programs/Microsoft VS Code/bin, mtime 1660279815): 4 files, no impossibilities.
+# C:\Program Files\Graphviz\bin (key C:/Program Files/Graphviz/bin, mtime 1646022963): 61 files, no impossibilities.
+# D:\Programs (key D:/Programs, mtime 1652233306): 10 files, no impossibilities.
+# C:\Program Files (x86)\GnuWin32\bin (key C:/Program Files (x86)/GnuWin32/bin, mtime 1637769870): 11 files, no impossibilities.
+
+# 4644 files, no impossibilities in 29 directories.
+
+# Implicit Rules
+
+# No implicit rules.
+
+# Files
+
+# Not a target:
+all:
+#  Command-line target.
+#  Implicit rule search has been done.
+#  File does not exist.
+#  File has not been updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+# Not a target:
+.DEFAULT:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+makefile:
+#  Implicit rule search has been done.
+#  Last modified 2022-06-17 20:23:51
+#  File has been updated.
+#  Successfully updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+# Not a target:
+.SUFFIXES:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+compile:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  commands to execute (from `makefile', line 18):
+	$(JAVAC) -d $(CLASS_DIR) $(SRCS)
+	
+
+clean:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  commands to execute (from `makefile', line 21):
+	rm -r $(BUILD_DIR)
+	
+
+build/jar/sweet.jar: compile
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  commands to execute (from `makefile', line 14):
+	mkdir -p $(dir $@)
+	$(JAR) --verbose --create --file $@ --main-class $(MAIN_CLASS) -C $(CLASS_DIR) .
+	
+
+# files hash-table stats:
+# Load=7/1024=1%, Rehash=0, Collisions=0/19=0%
+# VPATH Search Paths
+
+# No `vpath' search paths.
+
+# No general (`VPATH' variable) search path.
+
+# # of strings in strcache: 1
+# # of strcache buffers: 1
+# strcache size: total = 4096 / max = 4096 / min = 4096 / avg = 4096
+# strcache free: total = 4087 / max = 4087 / min = 4087 / avg = 4087
+
+# Finished Make data base on Thu Aug 18 11:34:57 2022
+
+ 

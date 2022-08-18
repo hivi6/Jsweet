@@ -1,5 +1,5 @@
-JAVAC := $(JAVA_HOME)/bin/javac.exe
-JAR := $(JAVA_HOME)/bin/jar.exe
+JAVAC := "$(JAVA_HOME)/bin/javac.exe"
+JAR := "$(JAVA_HOME)/bin/jar.exe"
 
 SRC_DIR := ./src
 BUILD_DIR := ./build
